@@ -1,0 +1,98 @@
+.nav {
+  height: 5vh;
+  background-color: #ed6a20;
+  &__list {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  &__link {
+    flex: 1;
+    color: white;
+  }
+  &__logo{
+
+  }
+  &__item {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:first-child{
+      margin-left: 2%;
+      width: 1.5%;
+      height: 50%;
+    }
+    &:nth-child(2){
+      margin-left: 10px;
+    }
+    &:last-child{
+      margin-right: 2%;
+      width: 1.5%;
+      height: 50%;
+    }
+    .pyramid {
+      &__line{
+        background-color: white;
+        padding-bottom: 5%;
+        padding-top: 5%;
+        margin-top: 15%;
+        margin-bottom: 15%;
+      }
+      &--top{
+        width: 100%;
+      }
+      &--middle{
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      &--bottom{
+        width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .hamburger {
+      &__line {
+        width: 100%;
+        background-color: white;
+        padding-bottom: 5%;
+        padding-top: 5%;
+        margin-top: 15%;
+        margin-bottom: 15%;
+      }
+    }
+  }
+  .separator{
+    flex: 1
+  }
+}
+//phones
+@media (max-width: 768px) {
+  .nav{
+    &__item{
+      &:first-child{
+        width: 5%;
+      }
+      &:last-child{
+        width: 5%;
+      }
+    }
+  }
+}
+
+//tablets
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav{
+    &__item{
+      &:first-child{
+        width: 2%;
+      }
+      &:last-child{
+        width: 2%;
+      }
+    }
+  }
+}
