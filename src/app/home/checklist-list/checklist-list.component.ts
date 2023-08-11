@@ -13,6 +13,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   @Input() outletId : string = "";
   subRefresh = new Subscription();
   checklists : Checklist[] = [];
+  isLoadingChecklists = true;
 
   constructor(private http: DataService, private shared: SharedService) {
   }
@@ -20,6 +21,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     this.makeHttpCallAfterSubject().subscribe({
       next: res => {
         this.checklists = res;
+        this.isLoadingChecklists = false;
       }, error: err => {
         console.log("err makeHttpCallAfterSubject " + err);
       }
@@ -30,6 +32,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   makeHttpCallAfterSubject(): Observable<Checklist[]> {
     return this.shared.checklistRefreshSubject.pipe(
       switchMap(data => {
+        this.isLoadingChecklists = true;
         const firstHttpCall = this.getBusinessDate();
         return firstHttpCall.pipe(
           concatMap(firstResponse => {
