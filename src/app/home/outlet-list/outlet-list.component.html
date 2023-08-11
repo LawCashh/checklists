@@ -1,0 +1,7 @@
+<div class="outlets">
+  <select class="outlets__select" #outletsSRef (change)="onSelect()" [(ngModel)]="selectedOutlet">
+    <option class="outlets__option" *ngFor="let outlet of outlets; index as i" [value]="outlet.id">
+      <span class="outlets__option__name">{{outlet.name}}</span>
+    </option>
+  </select>
+</div>
