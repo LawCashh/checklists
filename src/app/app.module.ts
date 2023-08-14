@@ -14,6 +14,7 @@ import { SubtaskListComponent } from './home/checklist-list/checklist-item/subta
 import { SubtaskComponent } from './home/checklist-list/checklist-item/subtask-list/subtask/subtask.component';
 import { OutletListComponent } from './home/outlet-list/outlet-list.component';
 import {FormsModule} from "@angular/forms";
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {FormsModule} from "@angular/forms";
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

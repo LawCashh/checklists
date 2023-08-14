@@ -2,7 +2,35 @@
   <span class="loader__spinner"></span>
 </div>
 <div class="checklists" *ngIf="!isLoadingChecklists">
-  <div class="checklists__checklist" *ngFor="let checklist of checklists; index as i">
-    <span>{{checklist.name}}</span>
+  <div class="checklists__checklist" *ngFor="let checklist of checklists; index as i"
+       (mousedown)="onMouseDown($event)"
+       (touchstart)="onTouchStart($event)"
+       (touchmove)="onTouchMove($event)"
+       (mouseup)="onMouseUp($event)"
+       (touchend)="onTouchEnd($event)">
+    <div class="checklists__checklist__title">
+      <span>{{checklist.name}}</span>
+    </div>
+    <div class="checklists__checklist__action" #actions>
+      <button class="checklists__checklist__setup">1</button>
+      <button class="checklists__checklist__delete" (click)="deleteChecklist(checklist.id)">2</button>
+    </div>
   </div>
+  <form *ngIf="addingChecklist" #checklistForm="ngForm" class="checklists__form" (ngSubmit)="addChecklist(checklistForm)" novalidate>
+
+    <input class="checklists__input"
+           name="checklistName"
+           [(ngModel)]="newChecklistName"
+           placeholder="Type a new checklist here..."
+           required
+           #checklistInput
+           #name="ngModel"
+           type="text" >
+    <div *ngIf="name.invalid && name.dirty" class="checklists__input__error">
+      Unesite ime.
+    </div>
+    <button type="submit" [disabled]="!checklistForm.valid">&#10003;</button>
+<!--    <button type="button" (click)="cancelNewChecklist(checklistForm)">X</button>-->
+  </form>
+  <div class="checklists__add" *ngIf="!addingChecklist" (click)="goToAddChecklist()">+</div>
 </div>

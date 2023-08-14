@@ -26,9 +26,50 @@
 }
 
 .checklists{
-  &__checklist{
-    padding-top: 2.5vh;
-    padding-bottom: 2.5vh;
+  width: 100vw;
+  overflow: hidden;
+  &__checklist, &__form{
+    padding-top: 3.5vh;
+    padding-bottom: 3.5vh;
     border-bottom: 1px solid #e7e7e7;
+  }
+  &__add{
+    padding: 10px;
+    background-color: #38acdc;
+    border-radius: 50%;
+    display: block;
+    font-size: 1.5rem;
+    color: white;
+    width: 28px;
+    text-align: center;
+    position: fixed;
+    bottom: 8vh;
+    right: 4vw;
+    cursor: pointer;
+  }
+  &__input{
+
+  }
+  &__checklist{
+    position: relative;
+    width: calc(100vw + 120px);
+    display: flex;
+    align-items: center;
+    &__title {
+      position: absolute;
+    }
+    &__action{
+      position: absolute;
+      right: 0;
+      width: 120px;
+      height: 100%;
+      transition: right 0.3s ease;
+      display: flex;
+      align-items: center;
+      button{
+        width: 50%;
+        height: 100%;
+      }
+    }
   }
 }
