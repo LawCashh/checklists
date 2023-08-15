@@ -24,6 +24,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   isSwiping = false;
   isDeleteModalOpen = false;
   checklistToDeleteId = "";
+  isErrorModalOpen = false;
+  errorType : "checklistAdd" | "checklistDelete" = "checklistAdd";
 
   constructor(private http: DataService, private shared: SharedService,
               private elementRef : ElementRef, private renderer: Renderer2) {
@@ -60,7 +62,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
       error: err => {
         console.log("greska u brisanju checkliste, error je " + err);
         this.isDeleteModalOpen = false;
-        this.ucitavanjeChecklisti();
+        this.errorType = "checklistDelete";
+        this.isErrorModalOpen = true;
       }
     });
   }
@@ -68,7 +71,10 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     this.isDeleteModalOpen = false;
     this.ucitavanjeChecklisti();
   }
-
+  error() {
+    this.isErrorModalOpen = false;
+    this.ucitavanjeChecklisti();
+  }
   onTouchStart(event: TouchEvent) {
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
@@ -192,7 +198,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
       error: err => {
         console.log("error na kreiranje nove checkliste, response je " +
           err);
-        this.ucitavanjeChecklisti();
+        this.errorType = "checklistAdd";
+        this.isErrorModalOpen = true;
       }
       });
     checklistForm.resetForm();

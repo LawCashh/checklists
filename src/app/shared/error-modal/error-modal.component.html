@@ -1,0 +1,14 @@
+<div class="modal">
+  <div class="modal__content">
+    <p>Error
+      <span *ngIf="kojiError=='checklistAdd'">adding checklist.</span>
+      <span *ngIf="kojiError=='checklistDelete'">deleting checklist.</span>
+      <span *ngIf="kojiError=='taskAdd'">adding task.</span>
+      <span *ngIf="kojiError=='taskDelete'">deleting task.</span>
+    </p>
+    <div class="modal__buttons">
+      <button (click)="onClose()">Close</button>
+    </div>
+
+  </div>
+</div>

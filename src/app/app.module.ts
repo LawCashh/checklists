@@ -16,6 +16,7 @@ import { OutletListComponent } from './home/outlet-list/outlet-list.component';
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
 import { DeleteModalComponent } from './shared/delete-modal/delete-modal.component';
+import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DeleteModalComponent } from './shared/delete-modal/delete-modal.compone
     SubtaskListComponent,
     SubtaskComponent,
     OutletListComponent,
-    DeleteModalComponent
+    DeleteModalComponent,
+    ErrorModalComponent
   ],
   imports: [
     BrowserModule,

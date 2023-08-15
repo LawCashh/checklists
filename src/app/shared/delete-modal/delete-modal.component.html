@@ -1,7 +1,13 @@
 <div class="modal">
   <div class="modal__content">
-    <h3>Delete Checklist</h3>
-    <p>Are you sure that you want to delete the checklist?</p>
+    <h3>Delete
+      <span *ngIf="staBrisem=='checklist'">Checklist</span>
+      <span *ngIf="staBrisem=='task'">Task</span>
+    </h3>
+    <p>Are you sure that you want to delete the
+      <span *ngIf="staBrisem=='checklist'">checklist?</span>
+      <span *ngIf="staBrisem=='task'">task?</span>
+    </p>
     <div class="modal__buttons">
       <button (click)="onCancel()">Cancel</button>
       <button (click)="onConfirm()">Delete</button>

@@ -34,11 +34,14 @@
            #name="ngModel"
            type="text" >
     <div *ngIf="name.invalid && name.dirty" class="checklists__input__error">
-      Unesite ime.
+      <span>Unesite ime.</span>
     </div>
     <button class="checklists__check" type="submit" [disabled]="!checklistForm.valid">&#10003;</button>
 <!--    <button type="button" (click)="cancelNewChecklist(checklistForm)">X</button>-->
   </form>
   <div class="checklists__add" *ngIf="!addingChecklist" (click)="goToAddChecklist()">+</div>
 </div>
-<app-delete-modal *ngIf="isDeleteModalOpen" (confirm)="confirmDeleteChecklist()" (cancel)="cancelDeleteChecklist()"></app-delete-modal>
+<app-delete-modal *ngIf="isDeleteModalOpen" (confirm)="confirmDeleteChecklist()"
+                  (cancel)="cancelDeleteChecklist()"
+                  [staBrisem]="'checklist'"></app-delete-modal>
+<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
