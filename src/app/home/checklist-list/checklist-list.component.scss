@@ -28,10 +28,32 @@
 .checklists{
   width: 100vw;
   overflow: hidden;
-  &__checklist, &__form{
-    padding-top: 3.5vh;
-    padding-bottom: 3.5vh;
+  &__form {
+    padding: 2.5vh 5vw;
     border-bottom: 1px solid #e7e7e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__input {
+    flex: 1;
+    height: 30px;
+    border: none;
+  }
+  &__input:focus{
+    outline: none;
+  }
+  &__check {
+    width: 45px;
+    height: 30px;
+    border: none;
+    border-radius: 5%;
+    background-color: #ed6a20;
+    color: white;
+    font-size: 1rem;
+  }
+  &__check:disabled{
+    opacity: 50%;
   }
   &__add{
     padding: 10px;
@@ -47,16 +69,17 @@
     right: 4vw;
     cursor: pointer;
   }
-  &__input{
-
-  }
   &__checklist{
+    padding-top: 3.5vh;
+    padding-bottom: 3.5vh;
+    border-bottom: 1px solid #e7e7e7;
     position: relative;
     width: calc(100vw + 120px);
     display: flex;
     align-items: center;
     &__title {
       position: absolute;
+      cursor: pointer;
     }
     &__action{
       position: absolute;
@@ -67,9 +90,24 @@
       display: flex;
       align-items: center;
       button{
+        cursor: pointer;
         width: 50%;
         height: 100%;
+        border: none;
+        color: white;
       }
+    }
+    &__setup, &__delete{
+      img{
+        width: 50%;
+        filter: brightness(0) invert(1);
+      }
+    }
+    &__setup{
+      background-color: #b5b5b5;
+    }
+    &__delete {
+      background-color: #f23b30;
     }
   }
 }

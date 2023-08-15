@@ -7,13 +7,20 @@
        (touchstart)="onTouchStart($event)"
        (touchmove)="onTouchMove($event)"
        (mouseup)="onMouseUp($event)"
-       (touchend)="onTouchEnd($event)">
+       (touchend)="onTouchEnd($event)"
+        (mousemove)="onMouseMove($event)">
     <div class="checklists__checklist__title">
       <span>{{checklist.name}}</span>
     </div>
     <div class="checklists__checklist__action" #actions>
-      <button class="checklists__checklist__setup">1</button>
-      <button class="checklists__checklist__delete" (click)="deleteChecklist(checklist.id)">2</button>
+      <button type="button" class="checklists__checklist__setup">
+        <img alt="" src="./assets/images/home/checklist-list/gear.svg">
+        <span>Setup</span>
+      </button>
+      <button type="button" class="checklists__checklist__delete" (click)="deleteChecklist(checklist.id)">
+        <img alt="" src="./assets/images/home/checklist-list/trash-bin.svg">
+        <span>Delete</span>
+      </button>
     </div>
   </div>
   <form *ngIf="addingChecklist" #checklistForm="ngForm" class="checklists__form" (ngSubmit)="addChecklist(checklistForm)" novalidate>
@@ -29,8 +36,9 @@
     <div *ngIf="name.invalid && name.dirty" class="checklists__input__error">
       Unesite ime.
     </div>
-    <button type="submit" [disabled]="!checklistForm.valid">&#10003;</button>
+    <button class="checklists__check" type="submit" [disabled]="!checklistForm.valid">&#10003;</button>
 <!--    <button type="button" (click)="cancelNewChecklist(checklistForm)">X</button>-->
   </form>
   <div class="checklists__add" *ngIf="!addingChecklist" (click)="goToAddChecklist()">+</div>
 </div>
+<app-delete-modal *ngIf="isDeleteModalOpen" (confirm)="confirmDeleteChecklist()" (cancel)="cancelDeleteChecklist()"></app-delete-modal>

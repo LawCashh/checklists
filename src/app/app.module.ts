@@ -15,6 +15,7 @@ import { SubtaskComponent } from './home/checklist-list/checklist-item/subtask-l
 import { OutletListComponent } from './home/outlet-list/outlet-list.component';
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
+import { DeleteModalComponent } from './shared/delete-modal/delete-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {AppRoutingModule} from "./app-routing.module";
     ChecklistItemComponent,
     SubtaskListComponent,
     SubtaskComponent,
-    OutletListComponent
+    OutletListComponent,
+    DeleteModalComponent
   ],
   imports: [
     BrowserModule,

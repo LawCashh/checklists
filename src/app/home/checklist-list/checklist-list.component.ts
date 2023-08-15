@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {concatMap, Observable, Subscription, switchMap} from "rxjs";
 import {DataService} from "../../data.service";
-import {SharedService} from "../../shared.service";
+import {SharedService} from "../../shared/shared.service";
 import {Checklist} from "./checklist.model";
 import {NgForm} from "@angular/forms";
 
@@ -22,6 +22,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   startX: number = 0;
   startY: number = 0;
   isSwiping = false;
+  isDeleteModalOpen = false;
+  checklistToDeleteId = "";
 
   constructor(private http: DataService, private shared: SharedService,
               private elementRef : ElementRef, private renderer: Renderer2) {
@@ -45,20 +47,26 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
   deleteChecklist(checklistId: string) {
       this.isLoadingChecklists = true;
-      this.http.deleteChecklist("http://api-development.synergysuite.net/rest/checklists/tasks/", checklistId).subscribe({
-        next: res => {
-          console.log(JSON.stringify(res));
-          this.ucitavanjeChecklisti();
-        },
-        error: err => {
-          console.log("greska u brisanju checkliste, error je " + err);
-          this.ucitavanjeChecklisti();
-        }
-      });
+      this.isDeleteModalOpen = true;
+      this.checklistToDeleteId = checklistId;
   }
-  onMouseDown(event: MouseEvent) {
-    this.startX = event.clientX;
-    this.isSwiping = true;
+  confirmDeleteChecklist(){
+    this.http.deleteChecklist("http://api-development.synergysuite.net/rest/checklists/tasks/", this.checklistToDeleteId).subscribe({
+      next: res => {
+        console.log(JSON.stringify(res));
+        this.isDeleteModalOpen = false;
+        this.ucitavanjeChecklisti();
+      },
+      error: err => {
+        console.log("greska u brisanju checkliste, error je " + err);
+        this.isDeleteModalOpen = false;
+        this.ucitavanjeChecklisti();
+      }
+    });
+  }
+  cancelDeleteChecklist(){
+    this.isDeleteModalOpen = false;
+    this.ucitavanjeChecklisti();
   }
 
   onTouchStart(event: TouchEvent) {
@@ -67,18 +75,18 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     this.isSwiping = true;
   }
 
-  onMouseUp(event: MouseEvent) {
-    // this.isSwiping = false;
-    // let target = event.target as HTMLElement;
-    // target.style.transform = 'translateX(0)';
-  }
 
   onTouchEnd(event: TouchEvent) {
     this.isSwiping = false;
     let target = event.target as HTMLElement;
-    if (target.style.transform !== 'translateX(-120px)')
-    target.style.transform = 'translateX(0)';
-    //console.log("hahahaha" + event.changedTouches[0].clientX);
+    if (target.style.transform !== 'translateX(-120px)'){
+      target.style.transform = 'translateX(0)';
+      setTimeout(() => {
+        this.addingChecklist = false;
+      }, 200);
+    }
+    //ova linija za micanje +
+    else this.addingChecklist = true;
   }
 
   onTouchMove(event: TouchEvent) {
@@ -86,9 +94,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     if (!this.isSwiping) return;
     const deltaX = event.touches[0].clientX - this.startX;
     const deltaY = event.touches[0].clientY - this.startY;
-    // console.log(deltaX);
     const maxDelta = target.offsetWidth - window.innerWidth;
-    // console.log(maxDelta);
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         target.style.transform = `translateX(${-Math.min(
@@ -97,7 +103,6 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         )}px)`;
       } else {
         let delta = -(-120 + deltaX);
-        // console.log(delta + "xd");
         target.style.transform = `translateX(${-Math.min(
           delta,
           maxDelta
@@ -108,7 +113,17 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
     }
   }
-
+  onMouseDown(event: MouseEvent) {
+    this.startX = event.clientX;
+    //this.startY = event.clientY;
+    this.isSwiping = true;
+  }
+  onMouseUp(event: MouseEvent) {
+    this.isSwiping = false;
+    let target = event.target as HTMLElement;
+    if (target.style.transform !== 'translateX(-120px)')
+      target.style.transform = 'translateX(0)';
+  }
   onMouseMove(event: MouseEvent) {
     let target = event.target as HTMLElement;
     if (!this.isSwiping) return;
@@ -121,9 +136,10 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         maxDelta
       )}px)`;
     } else {
-      target.style.transform = `translateX(${Math.min(
-        deltaX,
-        0
+      let delta = -(-120 + deltaX);
+      target.style.transform = `translateX(${-Math.min(
+        delta,
+        maxDelta
       )}px)`;
     }
   }

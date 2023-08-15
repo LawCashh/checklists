@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {DataService} from "../../data.service";
 import {Outlet} from "./outlet.model";
-import {SharedService} from "../../shared.service";
+import {SharedService} from "../../shared/shared.service";
 import {Observable, Subscription} from "rxjs";
 
 @Component({

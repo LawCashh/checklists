@@ -1,5 +1,5 @@
 .nav {
-  height: 5vh;
+  height: 7vh;
   background-color: #ed6a20;
   &__list {
     height: 100%;
@@ -12,7 +12,7 @@
     color: white;
   }
   &__logo{
-
+    font-size: 1.2rem;
   }
   &__item {
     height: 100%;
@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     &:first-child{
-      margin-left: 2%;
+      margin-left: 4%;
       width: 1.5%;
       height: 50%;
     }
@@ -28,7 +28,7 @@
       margin-left: 10px;
     }
     &:last-child{
-      margin-right: 2%;
+      margin-right: 4%;
       width: 1.5%;
       height: 50%;
     }
