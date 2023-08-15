@@ -2,8 +2,9 @@ import {Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild} f
 import {concatMap, Observable, Subscription, switchMap} from "rxjs";
 import {DataService} from "../../data.service";
 import {SharedService} from "../../shared/shared.service";
-import {Checklist} from "./checklist.model";
+import {Checklist} from "../checklist.model";
 import {NgForm} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-checklist-list',
@@ -28,7 +29,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   errorType : "checklistAdd" | "checklistDelete" = "checklistAdd";
 
   constructor(private http: DataService, private shared: SharedService,
-              private elementRef : ElementRef, private renderer: Renderer2) {
+              private elementRef : ElementRef, private renderer: Renderer2,
+              private router: Router) {
   }
   ngOnInit(): void {
     this.ucitavanjeChecklisti();
@@ -211,8 +213,12 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   //   checklistForm.resetForm();
   // }
 
+  setupChecklist(id: string) {
+      this.router.navigate(["setup-checklist", id]);
+  }
 
   ngOnDestroy(): void {
     this.subRefresh.unsubscribe();
   }
+
 }

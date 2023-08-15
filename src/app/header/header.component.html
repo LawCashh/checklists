@@ -9,7 +9,8 @@
     </div>
     <div class="nav__item logo">
       <a class="nav__link">
-        <span class="nav__logo">Checklists</span>
+        <span class="nav__logo" *ngIf="isRootRoute()">Checklists</span>
+        <span class="nav__logo" *ngIf="isSetupRoute()">Checklist setup</span>
       </a>
     </div>
     <div class="nav__item separator"></div>

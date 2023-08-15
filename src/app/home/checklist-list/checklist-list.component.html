@@ -13,7 +13,7 @@
       <span>{{checklist.name}}</span>
     </div>
     <div class="checklists__checklist__action" #actions>
-      <button type="button" class="checklists__checklist__setup">
+      <button type="button" class="checklists__checklist__setup" (click)="setupChecklist(checklist.id)">
         <img alt="" src="./assets/images/home/checklist-list/gear.svg">
         <span>Setup</span>
       </button>
