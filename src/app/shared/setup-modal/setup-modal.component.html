@@ -1,0 +1,17 @@
+<div class="modal">
+  <div class="modal__content">
+    <h3>Setup
+      <span *ngIf="staSetupujem=='checklist'">Checklist</span>
+      <span *ngIf="staSetupujem=='task'">Task</span>
+    </h3>
+    <p>Are you sure that you want to save the
+      <span *ngIf="staSetupujem=='checklist'">checklist?</span>
+      <span *ngIf="staSetupujem=='task'">task?</span>
+    </p>
+    <div class="modal__buttons">
+      <button (click)="onCancel()">Cancel</button>
+      <button (click)="onConfirm()">Save</button>
+    </div>
+
+  </div>
+</div>

@@ -31,9 +31,11 @@ export class OutletListComponent implements OnInit, OnDestroy {
       })
   }
 
+
   onSelect() {
     this.shared.outletId = this.selectedOutlet;
     this.optionEmitter.emit(this.selectedOutlet);
+    // localStorage.setItem('selectedOutlet', this.selectedOutlet);
   }
   getOutletList(): Observable<Outlet[]> {
     return this.http.getData<Outlet[]>(

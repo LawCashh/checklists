@@ -1,1 +1,52 @@
-<p>checklist-setup works!</p>
+<!--leftovers-->
+<!--(ngSubmit)="setupChecklist(setupChecklistForm)"-->
+
+<div class="loader" *ngIf="isLoadingSetup">
+  <span class="loader__spinner"></span>
+</div>
+<div class="setup" *ngIf="!isLoadingSetup">
+  <form class="setup__form" #setupChecklistForm="ngForm"
+
+  >
+    <div class="setup__form__name">
+      <label for="name">Checklist Name <sup>*</sup></label>
+      <input type="text"
+             id="name" name="name" placeholder="Start typing the name here.."
+             [(ngModel)]="name"
+             required
+              #nameInput="ngModel">
+      <div *ngIf="nameInput.invalid && nameInput.dirty" class="setup__form__name__error">
+        <span>Unesite ime.</span>
+      </div>
+    </div>
+    <div class="setup__form__description">
+      <label for="description">Checklist Description</label>
+      <textarea rows="6" cols="100" maxlength="250" id="description"
+                [(ngModel)]="descText" name="description"
+                (input)="updateDescLength()" placeholder="Start typing the description here.."></textarea>
+    </div>
+    <span class="setup__form__description__span">{{currDescLength}}/{{maxDescLength}}</span>
+    <div class="setup__form__alertlist">
+      <label for="alert-list">Alert List</label>
+      <input type="text" id="alert-list" name="alert-list" placeholder="Start typing the alert list here.."
+      [(ngModel)]="alertList">
+    </div>
+    <div class="setup__form__radiodiv">
+      <input class="setup__form__radiodiv__checkbox" type="checkbox" id="checkmark-lastday" name="checkmark-lastday"
+      [(ngModel)]="lastDay">
+      <label for="checkmark-lastday">Checklist to be completed at the last day of the month</label>
+    </div>
+    <div class="setup__form__buttonsdiv">
+      <div class="setup__form__buttonsdiv__buttons">
+        <button type="button" (click)="cancelEverything(setupChecklistForm)">Cancel</button>
+        <button type="button" (click)="setupChecklist(setupChecklistForm)" [disabled]="!setupChecklistForm.valid">Save</button>
+      </div>
+    </div>
+    <app-setup-modal *ngIf="isSaveModalOpen" (confirm)="confirmSetupChecklist(setupChecklistForm)"
+                     (cancel)="cancelSetupChecklist()"
+                     [staSetupujem]="'checklist'"></app-setup-modal>
+  </form>
+</div>
+<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="'checklistEdit'"></app-error-modal>
+
+
