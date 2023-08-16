@@ -1,15 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../data.service";
 import {ChecklistFull} from "../checklist.model";
 import {NgForm} from "@angular/forms";
+import {SharedService} from "../../shared/shared.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-checklist-setup',
   templateUrl: './checklist-setup.component.html',
   styleUrls: ['./checklist-setup.component.scss']
 })
-export class ChecklistSetupComponent implements OnInit{
+export class ChecklistSetupComponent implements OnInit, OnDestroy{
 
   checklistId: string = "";
   checklistObject: any;
@@ -22,11 +24,14 @@ export class ChecklistSetupComponent implements OnInit{
   lastDay: boolean = false;
   isSaveModalOpen = false;
   isErrorModalOpen: boolean = false;
+  isCheckModalOpen: boolean = false;
+  checkModalSubscription = new Subscription();
 
 
   constructor(private activatedRoute: ActivatedRoute, private http: DataService,
-                      private router: Router) {
+                      private router: Router, private shared: SharedService) {
   }
+
 
   updateDescLength() {
     if(this.descText !== null)
@@ -37,6 +42,9 @@ export class ChecklistSetupComponent implements OnInit{
     this.isSaveModalOpen = true;
   }
   ngOnInit(): void {
+    this.checkModalSubscription = this.shared.getSetupCheckModalObservable().subscribe(value => {
+      this.isCheckModalOpen = value;
+    });
     this.checklistId = this.activatedRoute.snapshot.params['id'];
     this.ucitavanjeDetaljaCheckliste();
   }
@@ -121,5 +129,8 @@ export class ChecklistSetupComponent implements OnInit{
   }
   cancelSetupChecklist() {
       this.isSaveModalOpen = false;
+  }
+  ngOnDestroy(): void {
+    this.checkModalSubscription.unsubscribe();
   }
 }

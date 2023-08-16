@@ -18,6 +18,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import { DeleteModalComponent } from './shared/delete-modal/delete-modal.component';
 import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 import { SetupModalComponent } from './shared/setup-modal/setup-modal.component';
+import { CheckModalComponent } from './shared/check-modal/check-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { SetupModalComponent } from './shared/setup-modal/setup-modal.component'
     OutletListComponent,
     DeleteModalComponent,
     ErrorModalComponent,
-    SetupModalComponent
+    SetupModalComponent,
+    CheckModalComponent
   ],
   imports: [
     BrowserModule,

@@ -20,6 +20,10 @@ export class OutletListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+      let id = localStorage.getItem("selectedOutlet");
+      if (id !== null)
+      this.selectedOutlet = id;
+      else this.selectedOutlet = "500000101";
       this.outletSub = this.getOutletList().subscribe({
         next: res => {
           //console.log(res);
@@ -35,7 +39,7 @@ export class OutletListComponent implements OnInit, OnDestroy {
   onSelect() {
     this.shared.outletId = this.selectedOutlet;
     this.optionEmitter.emit(this.selectedOutlet);
-    // localStorage.setItem('selectedOutlet', this.selectedOutlet);
+    localStorage.setItem("selectedOutlet", this.selectedOutlet);
   }
   getOutletList(): Observable<Outlet[]> {
     return this.http.getData<Outlet[]>(

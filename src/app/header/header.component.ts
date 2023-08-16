@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {SharedService} from "../shared/shared.service";
 
 @Component({
   selector: 'app-header',
@@ -8,7 +9,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class HeaderComponent {
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private shared: SharedService) {
   }
 
   isSetupRoute() {
@@ -19,4 +21,8 @@ export class HeaderComponent {
     return this.router.url === "/";
   }
 
+  goBackFromSetupChecklist() {
+    this.shared.setSetupCheckModal(true);
+    console.log("xd");
+  }
 }

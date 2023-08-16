@@ -1,10 +1,15 @@
 <nav class="nav">
   <div class="nav__list">
-    <div class="nav__item">
+    <div class="nav__item" *ngIf="isRootRoute()">
       <a class="nav__link hamburger">
         <div class="hamburger__line"></div>
         <div class="hamburger__line"></div>
         <div class="hamburger__line"></div>
+      </a>
+    </div>
+    <div class="nav__item" *ngIf="isSetupRoute()">
+      <a class="nav__link left-arrow" (click)="goBackFromSetupChecklist()">
+        <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
       </a>
     </div>
     <div class="nav__item logo">
@@ -14,6 +19,11 @@
       </a>
     </div>
     <div class="nav__item separator"></div>
+    <div class="nav__item" *ngIf="isSetupRoute()">
+      <a class="nav__link binlink" >
+        <img alt="" src="./assets/images/home/setup-checklist/trash-can2.svg">
+      </a>
+    </div>
     <div class="nav__item">
       <a class="nav__link pyramid">
         <div class="pyramid__line pyramid--top"></div>

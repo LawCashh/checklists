@@ -38,10 +38,11 @@
     </div>
     <div class="setup__form__buttonsdiv">
       <div class="setup__form__buttonsdiv__buttons">
-        <button type="button" (click)="cancelEverything(setupChecklistForm)">Cancel</button>
+        <button type="button" (click)="isCheckModalOpen=true">Cancel</button>
         <button type="button" (click)="setupChecklist(setupChecklistForm)" [disabled]="!setupChecklistForm.valid">Save</button>
       </div>
     </div>
+    <app-check-modal *ngIf="isCheckModalOpen" (cancel)="isCheckModalOpen=false" (confirm)="cancelEverything(setupChecklistForm)"></app-check-modal>
     <app-setup-modal *ngIf="isSaveModalOpen" (confirm)="confirmSetupChecklist(setupChecklistForm)"
                      (cancel)="cancelSetupChecklist()"
                      [staSetupujem]="'checklist'"></app-setup-modal>

@@ -46,7 +46,10 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         console.log("err makeHttpCallAfterSubject " + err);
       }
     });
-    this.shared.changeOutlet(this.shared.outletId);
+    let id = localStorage.getItem(`selectedOutlet`);
+    if (id !== null)
+      this.shared.changeOutlet(id);
+    else this.shared.changeOutlet(this.shared.outletId);
   }
 
   deleteChecklist(checklistId: string) {
@@ -159,8 +162,10 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         const firstHttpCall = this.getBusinessDate();
         return firstHttpCall.pipe(
           concatMap(firstResponse => {
+            let outlet = localStorage.getItem("selectedOutlet");
+            if (outlet == null) outlet = this.shared.outletId;
             return this.http.getData<Checklist[]>("http://api-development.synergysuite.net/rest/checklists/tasks?date=" +
-              firstResponse + "&companyId=" + this.outletId + "&corporateId=500000000&personId=1490106392118050028&type=CHECK_LIST");
+              firstResponse + "&companyId=" + outlet + "&corporateId=500000000&personId=1490106392118050028&type=CHECK_LIST");
           })
         );
       })

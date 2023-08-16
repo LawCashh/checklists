@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +10,23 @@ export class SharedService {
   token = "82dbdf03-a920-42d3-ba4c-9f68bc62522c";
   outletId = "500000101";
   checklistRefreshSubject = new Subject();
+  setupCheckModal = false;
+  setupCheckModalSubject: Subject<boolean> = new Subject<boolean>();
   constructor() { }
 
   changeOutlet(newId: string){
     this.outletId = newId;
     this.checklistRefreshSubject.next(this.outletId);
+  }
+
+  setSetupCheckModal(value: boolean) {
+    this.setupCheckModal = value;
+    this.setupCheckModalSubject.next(value);
+  }
+  getSetupCheckModal() {
+    return this.setupCheckModal;
+  }
+  getSetupCheckModalObservable(): Observable<boolean> {
+    return this.setupCheckModalSubject.asObservable();
   }
 }
