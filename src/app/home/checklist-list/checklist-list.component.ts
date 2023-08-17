@@ -187,10 +187,12 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
   addChecklist(checklistForm: NgForm){
     this.addingChecklist = false;
+    let id = localStorage.getItem("selectedOutlet");
+    if (id == null) id = this.outletId;
     const newChecklist = {
       "name": this.newChecklistName,
       "validDays": "montuewedthufrisatsun",
-      "companyId":this.outletId,
+      "companyId": id,
       "corporateId": this.shared.corporateId,
       "personId": this.shared.userId
     }

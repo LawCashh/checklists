@@ -21,7 +21,7 @@
     <div class="nav__item separator"></div>
     <div class="nav__item" *ngIf="isSetupRoute()">
       <a class="nav__link binlink" >
-        <img alt="" src="./assets/images/home/setup-checklist/trash-can2.svg">
+        <img alt="" src="./assets/images/home/setup-checklist/trash-can2.svg" (click)="deleteChecklistFromSetup()">
       </a>
     </div>
     <div class="nav__item">

@@ -23,6 +23,8 @@ export class HeaderComponent {
 
   goBackFromSetupChecklist() {
     this.shared.setSetupCheckModal(true);
-    console.log("xd");
+  }
+  deleteChecklistFromSetup() {
+    this.shared.setSetupDeleteModal(true);
   }
 }

@@ -48,6 +48,8 @@
                      [staSetupujem]="'checklist'"></app-setup-modal>
   </form>
 </div>
-<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="'checklistEdit'"></app-error-modal>
+<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
+<app-delete-modal *ngIf="isDeleteModalOpen" [staBrisem]="'checklist'"
+                  (cancel)="isDeleteModalOpen=false" (confirm)="brisanjeChecklisteIzSetupa()"></app-delete-modal>
 
 

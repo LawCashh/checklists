@@ -26,6 +26,9 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   isErrorModalOpen: boolean = false;
   isCheckModalOpen: boolean = false;
   checkModalSubscription = new Subscription();
+  deleteModalSubscription = new Subscription();
+  isDeleteModalOpen = false;
+  errorType: 'checklistEdit' | 'checklistDelete' = 'checklistEdit';
 
 
   constructor(private activatedRoute: ActivatedRoute, private http: DataService,
@@ -44,6 +47,9 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.checkModalSubscription = this.shared.getSetupCheckModalObservable().subscribe(value => {
       this.isCheckModalOpen = value;
+    });
+    this.deleteModalSubscription = this.shared.getSetupDeleteModalObservable().subscribe(value => {
+      this.isDeleteModalOpen = value;
     });
     this.checklistId = this.activatedRoute.snapshot.params['id'];
     this.ucitavanjeDetaljaCheckliste();
@@ -105,6 +111,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
         console.log("error na update checkliste, response je " +
           err);
         setupChecklistForm.resetForm();
+        this.errorType = 'checklistEdit';
         this.isErrorModalOpen = true;
       }
     });
@@ -132,5 +139,22 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy(): void {
     this.checkModalSubscription.unsubscribe();
+    this.deleteModalSubscription.unsubscribe();
+  }
+
+  brisanjeChecklisteIzSetupa() {
+    this.http.deleteChecklist("http://api-development.synergysuite.net/rest/checklists/tasks/", this.checklistId).subscribe({
+      next: res => {
+        console.log(JSON.stringify(res));
+        this.isDeleteModalOpen = false;
+        this.idiNaRoot();
+      },
+      error: err => {
+        console.log("greska u brisanju checkliste, error je " + err);
+        this.isDeleteModalOpen = false;
+        this.errorType = "checklistDelete";
+        this.isErrorModalOpen = true;
+      }
+    });
   }
 }

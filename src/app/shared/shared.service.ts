@@ -12,11 +12,21 @@ export class SharedService {
   checklistRefreshSubject = new Subject();
   setupCheckModal = false;
   setupCheckModalSubject: Subject<boolean> = new Subject<boolean>();
+  setupDeleteModal = false;
+  setupDeleteModalSubject = new Subject<boolean>();
   constructor() { }
 
   changeOutlet(newId: string){
     this.outletId = newId;
     this.checklistRefreshSubject.next(this.outletId);
+  }
+
+  setSetupDeleteModal(value: boolean) {
+    this.setupDeleteModal = value;
+    this.setupDeleteModalSubject.next(value);
+  }
+  getSetupDeleteModalObservable(): Observable<boolean> {
+    return this.setupDeleteModalSubject.asObservable();
   }
 
   setSetupCheckModal(value: boolean) {
