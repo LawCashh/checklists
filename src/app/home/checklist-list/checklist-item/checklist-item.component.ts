@@ -31,6 +31,10 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   isErrorModalOpen = false;
   errorType : "taskAdd" | "taskDelete" = "taskAdd";
   addingSubtaskFormOpen = false;
+  //niz za svaki subtask, 0 je empty, 1 je completed, 2 je n/a, 3 empty but has result
+  subtasksCompletedNaEmpty: number[] = [];
+  showDetails: boolean[] = [];
+
 
 
   constructor(private http: DataService, private activatedRoute: ActivatedRoute,
@@ -42,23 +46,40 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
     this.openChecklistModalSubscription = this.shared.getOpenChecklistModalObservable().subscribe(value => {
         this.isOpenChecklistModalOpen = value;
     });
-    this.ucitavanjeCheckliste().subscribe(
-        {
-          next: res => {
-            this.checklistWithSubtasksObject = res;
-            console.log("uspio get detalja checkliste sa subtaskovima, evo ih "
-                + JSON.stringify(this.checklistWithSubtasksObject));
-            this.name = res.name;
-            this.descText = res.description;
-            this.subtasks = res.subTasks;
-            this.isLoadingOpenChecklist = false;
-          },
-          error: err => {
-            console.log("error get detalja checkliste sa subtaskovima, error je " + err);
-          }
-        }
-    );
+    this.ucitavanjeCheckliste();
   }
+    ucitavanjeCheckliste () {
+        this.ucitavanjeChecklistePartOne().subscribe(
+            {
+                next: res => {
+                    this.checklistWithSubtasksObject = res;
+                    console.log("uspio get detalja checkliste sa subtaskovima, evo ih "
+                        + JSON.stringify(this.checklistWithSubtasksObject));
+                    this.name = res.name;
+                    this.descText = res.description;
+                    this.subtasks = res.subTasks;
+                    for(let i = 0; i < this.subtasks.length; i++){
+                        this.showDetails[i] = false;
+                        let trenutniSubtask = this.subtasks[i];
+                        if(trenutniSubtask.result !== null){
+                            if(trenutniSubtask.result.completed==true){
+                                this.subtasksCompletedNaEmpty[i] = 1;
+                            }
+                            else if (trenutniSubtask.result.na==true){
+                                this.subtasksCompletedNaEmpty[i] = 2;
+                            }
+                            else this.subtasksCompletedNaEmpty[i] = 3;
+                        } else this.subtasksCompletedNaEmpty[i] = 0;
+                    }
+                    console.log("listaaa je " + this.subtasksCompletedNaEmpty);
+                    this.isLoadingOpenChecklist = false;
+                },
+                error: err => {
+                    console.log("error get detalja checkliste sa subtaskovima, error je " + err);
+                }
+            }
+        );
+    }
 
     deleteSubtask(subtaskId: string) {
         this.isLoadingOpenChecklist = true;
@@ -96,31 +117,196 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         let id = localStorage.getItem("selectedOutlet");
         if (id == null) id = this.shared.outletId;
         const newSubtask = {
-            // "name": this.newChecklistName,
-            // "validDays": "montuewedthufrisatsun",
-            // "companyId": id,
-            // "corporateId": this.shared.corporateId,
-            // "personId": this.shared.userId
+            "companyId": id,
+            "name": this.newSubtaskName,
+            "validDays":"montuewedthufrisatsun",
+            "taskId": this.checklistId
         }
         this.isLoadingOpenChecklist = true;
-        // this.http.postSubtask("http://api-development.synergysuite.net/rest/checklists/tasks/CHECK_LIST",
-        //     newChecklist).subscribe({
-        //     next: res => {
-        //         console.log("Kreirana nova checkliste, response je " +
-        //             JSON.stringify(res));
-        //         this.ucitavanjeChecklisti();
-        //     },
-        //     error: err => {
-        //         console.log("error na kreiranje nove checkliste, response je " +
-        //             err);
-        //         this.errorType = "checklistAdd";
-        //         this.isErrorModalOpen = true;
-        //     }
-        // });
+        this.http.postSubtask("http://api-development.synergysuite.net/rest/checklists/subtasks/",
+            newSubtask).subscribe({
+            next: res => {
+                console.log("Kreiran novi subtask, response je " +
+                    JSON.stringify(res));
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("error na kreiranje nove checkliste, response je " +
+                    err);
+                this.errorType = "taskAdd";
+                this.isErrorModalOpen = true;
+            }
+        });
         subtaskForm.resetForm();
     }
+    markAsNA(subtaskId: string, value: number) {
+        if(value == 2 ) return;
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
 
-  ucitavanjeCheckliste (): Observable<Checklist> {
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+        const updatedSubtask = {
+            "subTaskId": subtaskId,
+            "companyId": id,
+            "person":{
+                "id":this.shared.userId
+            },
+            "taskDate": currDateString,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "completed":false,
+            "na":true,
+            "note":null,
+        }
+        this.http.postSubtaskAsNA("http://api-development.synergysuite.net/rest/checklists/subtasks/results/",
+            updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno markovao kao na, res je "+ res);
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska za markovanje kao na, err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.ucitavanjeCheckliste();
+            }
+        })
+    }
+    markAsCompletedNoResult(subtaskId: string) {
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+
+        const updatedSubtask = {
+            "subTaskId": subtaskId,
+            "companyId": id,
+            "person":{"id":this.shared.userId},
+            "taskDate": currDateString,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "completed":true,
+            "na":false,
+            "note":null
+        }
+        this.http.postSubtaskAsCompleted("http://api-development.synergysuite.net/rest/checklists/subtasks/results/",
+            updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno markovao kao complete, res je "+ res);
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska za markovanje kao complete, err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.ucitavanjeCheckliste();
+            }
+        })
+    }
+    markAsCompletedHasResult(subtaskResultId: string, subtaskId: string) {
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+
+        const updatedSubtask = {
+            "id": subtaskResultId,
+            "subTaskId": subtaskId,
+            "companyId": id,
+            "person":{"id":"1490106392118050028",
+                "lastName":"Suite",
+                "firstName":"Synergy",
+                "userName":"synergy",
+                "knownAs":"Synergy Suite",
+                "companyId":"500000000",
+                "personTypeId":"1",
+                "email":"admin+hq@synergysuite.com"},
+            "note":null,
+            "history":"",
+            "taskDate": currDateString,
+            "completed":true,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "lateNotificationSent":null,
+            "overridden":null,
+            "approvalRecordId":null,
+            "na":false
+        }
+
+        this.http.putSubtaskAsCompleted("http://api-development.synergysuite.net/rest/checklists/subtasks/results/"
+            + subtaskResultId, updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno markovao kao complete(ima result btw), res je "+ res);
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska za markovanje kao complete(ima result btw), err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.ucitavanjeCheckliste();
+            }
+        });
+
+        this.ucitavanjeCheckliste();
+    }
+
+  ucitavanjeChecklistePartOne (): Observable<Checklist> {
       this.isLoadingOpenChecklist = true;
       return this.getBusinessDate().pipe(
           switchMap(firstResponse => {
@@ -238,4 +424,5 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
           }
       });
   }
+
 }

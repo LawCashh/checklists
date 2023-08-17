@@ -16,28 +16,40 @@
        (touchmove)="onTouchMove($event)"
        (mouseup)="onMouseUp($event)"
        (touchend)="onTouchEnd($event)"
-       (mousemove)="onMouseMove($event)" *ngFor="let subtask of subtasks">
-    <div class="subtask__title">
+       (mousemove)="onMouseMove($event)" *ngFor="let subtask of subtasks; index as i">
+    <div class="subtask__circle">
+      <div *ngIf="subtasksCompletedNaEmpty[i]==1" class="subtask__circle__div--completed">&#10003;</div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==0" class="subtask__circle__div--empty" (click)="markAsCompletedNoResult(subtask.id)"></div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==3" class="subtask__circle__div--empty" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id)"></div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==2" class="subtask__circle__div--na">&minus;</div>
+    </div>
+    <div (click)="showDetails[i] = !showDetails[i]" class="subtask__title">
       <span>{{subtask.name}}</span>
     </div>
+    <div class="subtask__message" *ngIf="subtasksCompletedNaEmpty[i] == 1 && showDetails[i]">
+      <span >Completed by: {{subtask.result!.person.knownAs}} at {{subtask.result!.completedTime}}</span>
+    </div>
+    <div class="subtask__message" *ngIf="subtasksCompletedNaEmpty[i] == 2 && showDetails[i]">
+      <span >Marked as N/A by: {{subtask.result!.person.knownAs}} at {{subtask.result!.completedTime}}</span>
+    </div>
     <div class="subtask__action">
+      <button type="button" class="subtask__note">
+        <img alt="" src="./assets/images/home/open-checklist/note.png">
+        <span>Note</span>
+      </button>
+      <button type="button" class="subtask__na" (click)="markAsNA(subtask.id, subtasksCompletedNaEmpty[i])">
+        <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
+        <span>N/A</span>
+      </button>
       <button type="button" class="subtask__setup">
         <img alt="" src="./assets/images/home/checklist-list/gear.svg">
         <span>Setup</span>
       </button>
-      <button type="button" class="subtask__delete">
-        <img alt="" src="./assets/images/home/checklist-list/trash-bin.svg">
-        <span>Delete</span>
-      </button>
-      <button type="button" class="subtask__delete">
-        <img alt="" src="./assets/images/home/checklist-list/trash-bin.svg">
-        <span>Delete</span>
-      </button>
     </div>
   </div>
-  <form *ngIf="addingSubtaskFormOpen" #subtaskForm="ngForm" class="subtask__form" (ngSubmit)="addSubtask(subtaskForm)" novalidate>
+  <form *ngIf="addingSubtaskFormOpen" #subtaskForm="ngForm" class="subtasks__form" (ngSubmit)="addSubtask(subtaskForm)" novalidate>
 
-    <input class="checklists__input"
+    <input class="subtasks__input"
            name="subtaskName"
            [(ngModel)]="newSubtaskName"
            placeholder="Type a new subtask here..."

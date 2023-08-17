@@ -18,4 +18,18 @@ export class DataService {
   deleteChecklist(path: string, checklistId: string) {
     return this.http.delete(path + checklistId, {'headers': this.loginHeader});
   }
+  postSubtask(path: string, item: any) {
+    return this.http.post(path, item, {'headers': this.loginHeader});
+  }
+
+  postSubtaskAsCompleted(path: string, item: any){
+    return this.http.post(path, item, {'headers': this.loginHeader});
+  }
+  putSubtaskAsCompleted(path: string, item: any) {
+    return this.http.put(path, item, {'headers': this.loginHeader});
+  }
+
+  postSubtaskAsNA(path: string, item: any) {
+    return this.http.post(path, item, {'headers': this.loginHeader});
+  }
 }

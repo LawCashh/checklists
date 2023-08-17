@@ -25,7 +25,21 @@ export interface Subtask {
   taskId: string;
   rank: number;
   result: {
+    id: string;
+    na: boolean;
     completed: boolean;
+    "person": {
+      "id": string,
+      "companyId": string,
+      "lastName": string,
+      "firstName": string,
+      "knownAs": string,
+      "email": string,
+      "userName": string
+    },
+    completedTime: string;
+    completedDateTime: string;
+
   } | null;
   wsApprovalRecord: string | null;
   wizard: string | null;
