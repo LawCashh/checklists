@@ -77,16 +77,48 @@
     cursor: pointer;
   }
   &__checklist{
-    padding-top: 3.5vh;
-    padding-bottom: 3.5vh;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
     border-bottom: 1px solid #e7e7e7;
     position: relative;
     width: calc(100vw + 120px);
     display: flex;
     align-items: center;
+    &__circleborder {
+      border-radius:50%;
+      display:inline-block;
+      height: 25px;
+      width: 25px;
+      margin-left: 10px;
+      padding: 5px;
+      background:
+        linear-gradient(40deg, lightgray 50%, transparent 0),
+        linear-gradient(to left, orange 50%, transparent 0),
+        lightgray;
+    }
+    &__circle{
+      border-radius:50%;
+      background-color: white;
+      height: 25px;
+      width: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      span{
+        color: gray;
+        font-size: 75%;
+      }
+    }
     &__title {
-      position: absolute;
+      //position: absolute;
       cursor: pointer;
+      height: 25px;
+      margin-left: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #323232;
     }
     &__action{
       position: absolute;

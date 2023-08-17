@@ -19,6 +19,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   newChecklistName = "";
   addingChecklist = false;
   @ViewChild('checklistInput') checklistInput: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild('checklistsRef') checklistsRef: ElementRef<HTMLDivElement> | undefined;
   globalListenFunc: Function | undefined;
   startX: number = 0;
   startY: number = 0;
@@ -27,6 +28,8 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   checklistToDeleteId = "";
   isErrorModalOpen = false;
   errorType : "checklistAdd" | "checklistDelete" = "checklistAdd";
+  completedSubtasksForChecklist: number[] = [];
+  numberOfSubtasksForChecklist: number[] = [];
 
   constructor(private http: DataService, private shared: SharedService,
               private elementRef : ElementRef, private renderer: Renderer2,
@@ -41,6 +44,25 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     this.makeHttpCallAfterSubject().subscribe({
       next: res => {
         this.checklists = res;
+        for (let i = 0; i < this.checklists.length; i++){
+          let checklistCurr = this.checklists[i];
+          if (checklistCurr.subTasks == null){
+            this.completedSubtasksForChecklist[i] = 0;
+            this.numberOfSubtasksForChecklist[i] = 0;
+          }
+          else {
+            const subTaskovi = checklistCurr.subTasks;
+            this.numberOfSubtasksForChecklist[i] = subTaskovi.length;
+            let currCompleted = 0;
+            for (let j = 0; j < subTaskovi.length; j++){
+              let currResult = subTaskovi[j].result;
+              if(currResult !== null){
+                if(currResult.completed) currCompleted++;
+              }
+            }
+            this.completedSubtasksForChecklist[i] = currCompleted;
+          }
+        }
         this.isLoadingChecklists = false;
       }, error: err => {
         console.log("err makeHttpCallAfterSubject " + err);
@@ -154,7 +176,19 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
       )}px)`;
     }
   }
-
+  // getSubTaskList(checklistId: string) {
+  //   return this.getBusinessDate().pipe(
+  //       switchMap(firstResponse => {
+  //         let outlet = localStorage.getItem("selectedOutlet");
+  //         if (outlet == null) outlet = this.shared.outletId;
+  //         return this.http.getData("http://api-development.synergysuite.net/rest/checklists/tasks/" +
+  //           checklistId + "/subtasks?id=" +
+  //           checklistId + "&companyId=" +
+  //           outlet + "&personId=1490106392118050028&date="
+  //           + firstResponse);
+  //       })
+  //   );
+  // }
   makeHttpCallAfterSubject(): Observable<Checklist[]> {
     return this.shared.checklistRefreshSubject.pipe(
       switchMap(data => {
@@ -213,19 +247,34 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
       });
     checklistForm.resetForm();
   }
+  returnGradient(percentage: number): string {
+    let percent = percentage;
+    if (isNaN(percent) || percent <=0) {
+      percent = 0;
+    }
+    else percent = parseInt(percent.toFixed(0));
+    const orangeAngle = (percent / 100) * 360;
+    const grayAngle = 360 - orangeAngle;
+
+    return `
+      conic-gradient(
+        from 0deg,
+        orange 0deg ${orangeAngle}deg,
+        lightgray ${orangeAngle}deg ${grayAngle}deg
+      )
+    `;
+  }
+
 
   // cancelNewChecklist(checklistForm: NgForm){
   //   this.newChecklistName = "";
   //   this.addingChecklist = false;
   //   checklistForm.resetForm();
   // }
-
   setupChecklist(id: string) {
       this.router.navigate(["setup-checklist", id]);
   }
-
   ngOnDestroy(): void {
     this.subRefresh.unsubscribe();
   }
-
 }

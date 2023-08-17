@@ -15,6 +15,7 @@ export interface Checklist {
   [key: string]: any;
 }
 
+
 export interface Subtask {
   id: string;
   name: string;
@@ -23,7 +24,9 @@ export interface Subtask {
   completeByTime: string | null;
   taskId: string;
   rank: number;
-  result: string | null;
+  result: {
+    completed: boolean;
+  } | null;
   wsApprovalRecord: string | null;
   wizard: string | null;
   wizardId: string | null;
@@ -70,3 +73,4 @@ export interface ChecklistFull {
   "dueTime": string | null;
   [key: string]: any;
 }
+

@@ -1,7 +1,7 @@
 <div class="loader" *ngIf="isLoadingChecklists">
   <span class="loader__spinner"></span>
 </div>
-<div class="checklists" *ngIf="!isLoadingChecklists">
+<div class="checklists" *ngIf="!isLoadingChecklists" #checklistsRef>
   <div class="checklists__checklist" *ngFor="let checklist of checklists; index as i"
        (mousedown)="onMouseDown($event)"
        (touchstart)="onTouchStart($event)"
@@ -9,6 +9,12 @@
        (mouseup)="onMouseUp($event)"
        (touchend)="onTouchEnd($event)"
         (mousemove)="onMouseMove($event)">
+    <div class="checklists__checklist__circleborder"
+         [style.background]="returnGradient(completedSubtasksForChecklist[i]/numberOfSubtasksForChecklist[i]*100)">
+      <div class="checklists__checklist__circle">
+        <span>{{completedSubtasksForChecklist[i]}}/{{numberOfSubtasksForChecklist[i]}}</span>
+      </div>
+    </div>
     <div class="checklists__checklist__title">
       <span>{{checklist.name}}</span>
     </div>
