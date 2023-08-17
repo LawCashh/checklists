@@ -1,18 +1,23 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {SharedService} from "../shared/shared.service";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
 
+  currentChecklistId: string | null = "";
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private shared: SharedService) {
+              private shared: SharedService, private location: Location) {
   }
 
+  ngOnInit(): void {
+
+  }
   isSetupRoute() {
       return this.router.url.includes("setup-checklist");
   }
@@ -27,4 +32,18 @@ export class HeaderComponent {
   deleteChecklistFromSetup() {
     this.shared.setSetupDeleteModal(true);
   }
+
+  isOpenChecklistRoute() {
+    return this.router.url.includes("open-checklist");
+  }
+
+  goBackFromOpenChecklist() {
+    this.shared.setOpenChecklistModal(true);
+  }
+
+  goToSetupRouteFromOpenChecklist() {
+    let checklistId = this.location.path().slice(16, this.location.path().length);
+    this.router.navigate(["setup-checklist", checklistId]);
+  }
+
 }

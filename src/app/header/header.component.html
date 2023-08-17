@@ -12,6 +12,11 @@
         <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
       </a>
     </div>
+    <div class="nav__item" *ngIf="isOpenChecklistRoute()">
+      <a class="nav__link left-arrow" (click)="goBackFromOpenChecklist()">
+        <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
+      </a>
+    </div>
     <div class="nav__item logo">
       <a class="nav__link">
         <span class="nav__logo" *ngIf="isRootRoute()">Checklists</span>
@@ -29,6 +34,11 @@
         <div class="pyramid__line pyramid--top"></div>
         <div class="pyramid__line pyramid--middle"></div>
         <div class="pyramid__line pyramid--bottom"></div>
+      </a>
+    </div>
+    <div class="nav__item" *ngIf="isOpenChecklistRoute()">
+      <a class="nav__link binlink" >
+        <img alt="" src="./assets/images/home/checklist-list/gear.svg" (click)="goToSetupRouteFromOpenChecklist()">
       </a>
     </div>
   </div>

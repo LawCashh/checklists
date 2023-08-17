@@ -30,6 +30,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   errorType : "checklistAdd" | "checklistDelete" = "checklistAdd";
   completedSubtasksForChecklist: number[] = [];
   numberOfSubtasksForChecklist: number[] = [];
+  addingChecklistFormOpen = false;
 
   constructor(private http: DataService, private shared: SharedService,
               private elementRef : ElementRef, private renderer: Renderer2,
@@ -131,14 +132,14 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         target.style.transform = `translateX(${-Math.min(
-          -deltaX,
-          maxDelta
+            -deltaX,
+            maxDelta
         )}px)`;
       } else {
         let delta = -(-120 + deltaX);
         target.style.transform = `translateX(${-Math.min(
-          delta,
-          maxDelta
+            delta,
+            maxDelta
         )}px)`;
       }
     }
@@ -165,14 +166,14 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
     if (deltaX < 0) {
       target.style.transform = `translateX(${-Math.min(
-        -deltaX,
-        maxDelta
+          -deltaX,
+          maxDelta
       )}px)`;
     } else {
       let delta = -(-120 + deltaX);
       target.style.transform = `translateX(${-Math.min(
-        delta,
-        maxDelta
+          delta,
+          maxDelta
       )}px)`;
     }
   }
@@ -212,6 +213,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
   goToAddChecklist() {
     this.addingChecklist=true;
+    this.addingChecklistFormOpen = true;
     setTimeout(() => {
       if (this.checklistInput) {
         this.checklistInput.nativeElement.focus();
@@ -220,6 +222,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   }
 
   addChecklist(checklistForm: NgForm){
+    this.addingChecklistFormOpen = false;
     this.addingChecklist = false;
     let id = localStorage.getItem("selectedOutlet");
     if (id == null) id = this.outletId;
@@ -265,14 +268,11 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     `;
   }
 
-
-  // cancelNewChecklist(checklistForm: NgForm){
-  //   this.newChecklistName = "";
-  //   this.addingChecklist = false;
-  //   checklistForm.resetForm();
-  // }
   setupChecklist(id: string) {
       this.router.navigate(["setup-checklist", id]);
+  }
+  openChecklist(id: string) {
+      this.router.navigate(["open-checklist", id]);
   }
   ngOnDestroy(): void {
     this.subRefresh.unsubscribe();

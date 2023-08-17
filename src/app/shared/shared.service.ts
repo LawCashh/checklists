@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject} from "rxjs";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,9 @@ export class SharedService {
   setupCheckModalSubject: Subject<boolean> = new Subject<boolean>();
   setupDeleteModal = false;
   setupDeleteModalSubject = new Subject<boolean>();
-  constructor() { }
+  openChecklistModal = false;
+  openChecklistModalSubject: Subject<boolean> = new Subject<boolean>();
+  constructor(private http: HttpClient) { }
 
   changeOutlet(newId: string){
     this.outletId = newId;
@@ -38,5 +41,14 @@ export class SharedService {
   }
   getSetupCheckModalObservable(): Observable<boolean> {
     return this.setupCheckModalSubject.asObservable();
+  }
+
+  getOpenChecklistModalObservable(): Observable<boolean>{
+    return this.openChecklistModalSubject.asObservable();
+  }
+
+  setOpenChecklistModal(value: boolean) {
+      this.openChecklistModal = value;
+      this.openChecklistModalSubject.next(value);
   }
 }

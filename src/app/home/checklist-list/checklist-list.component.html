@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="checklists__checklist__title">
-      <span>{{checklist.name}}</span>
+      <span (click)="openChecklist(checklist.id)">{{checklist.name}}</span>
     </div>
     <div class="checklists__checklist__action" #actions>
       <button type="button" class="checklists__checklist__setup" (click)="setupChecklist(checklist.id)">
@@ -29,7 +29,7 @@
       </button>
     </div>
   </div>
-  <form *ngIf="addingChecklist" #checklistForm="ngForm" class="checklists__form" (ngSubmit)="addChecklist(checklistForm)" novalidate>
+  <form *ngIf="addingChecklistFormOpen" #checklistForm="ngForm" class="checklists__form" (ngSubmit)="addChecklist(checklistForm)" novalidate>
 
     <input class="checklists__input"
            name="checklistName"

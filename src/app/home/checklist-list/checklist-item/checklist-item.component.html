@@ -1,1 +1,59 @@
-<p>checklist-item works!</p>
+<div class="loader" *ngIf="isLoadingOpenChecklist">
+  <span class="loader__spinner"></span>
+</div>
+<div class="subtasks" *ngIf="!isLoadingOpenChecklist">
+  <div class="checklist__title">
+    <span>
+      {{name}}
+    </span>
+    <span>
+      {{descText}}
+    </span>
+  </div>
+  <div class="subtask"
+       (mousedown)="onMouseDown($event)"
+       (touchstart)="onTouchStart($event)"
+       (touchmove)="onTouchMove($event)"
+       (mouseup)="onMouseUp($event)"
+       (touchend)="onTouchEnd($event)"
+       (mousemove)="onMouseMove($event)" *ngFor="let subtask of subtasks">
+    <div class="subtask__title">
+      <span>{{subtask.name}}</span>
+    </div>
+    <div class="subtask__action">
+      <button type="button" class="subtask__setup">
+        <img alt="" src="./assets/images/home/checklist-list/gear.svg">
+        <span>Setup</span>
+      </button>
+      <button type="button" class="subtask__delete">
+        <img alt="" src="./assets/images/home/checklist-list/trash-bin.svg">
+        <span>Delete</span>
+      </button>
+      <button type="button" class="subtask__delete">
+        <img alt="" src="./assets/images/home/checklist-list/trash-bin.svg">
+        <span>Delete</span>
+      </button>
+    </div>
+  </div>
+  <form *ngIf="addingSubtaskFormOpen" #subtaskForm="ngForm" class="subtask__form" (ngSubmit)="addSubtask(subtaskForm)" novalidate>
+
+    <input class="checklists__input"
+           name="subtaskName"
+           [(ngModel)]="newSubtaskName"
+           placeholder="Type a new subtask here..."
+           required
+           #subtaskInput
+           #name="ngModel"
+           type="text" >
+    <div *ngIf="name.invalid && name.dirty" class="subtasks__input__error">
+      <span>Unesite ime.</span>
+    </div>
+    <button class="subtasks__check" type="submit" [disabled]="!subtaskForm.valid">&#10003;</button>
+  </form>
+  <div class="subtask__add" *ngIf="!addingSubtask" (click)="goToAddSubtask()">+</div>
+</div>
+<app-check-modal *ngIf="isOpenChecklistModalOpen" (cancel)="isOpenChecklistModalOpen=false" (confirm)="idiNaRoot()"></app-check-modal>
+<app-delete-modal *ngIf="isDeleteModalOpen" (confirm)="confirmDeleteSubtask()"
+                  (cancel)="cancelDeleteSubtask()"
+                  [staBrisem]="'task'"></app-delete-modal>
+<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
