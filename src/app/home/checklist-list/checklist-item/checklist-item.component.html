@@ -10,7 +10,7 @@
       {{descText}}
     </span>
   </div>
-  <div class="subtask"
+  <div [ngClass]="hasNote[i] == true ? 'subtask--bigger' : 'subtask'"
        (mousedown)="onMouseDown($event)"
        (touchstart)="onTouchStart($event)"
        (touchmove)="onTouchMove($event)"
@@ -20,24 +20,39 @@
     <div class="subtask__circle">
       <div *ngIf="subtasksCompletedNaEmpty[i]==1" class="subtask__circle__div--completed">&#10003;</div>
         <div *ngIf="subtasksCompletedNaEmpty[i]==0" class="subtask__circle__div--empty" (click)="markAsCompletedNoResult(subtask.id)"></div>
-        <div *ngIf="subtasksCompletedNaEmpty[i]==3" class="subtask__circle__div--empty" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id)"></div>
-        <div *ngIf="subtasksCompletedNaEmpty[i]==2" class="subtask__circle__div--na">&minus;</div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==3" class="subtask__circle__div--empty" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)"></div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==2" class="subtask__circle__div--na" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)">&minus;</div>
     </div>
-    <div (click)="showDetails[i] = !showDetails[i]" class="subtask__title">
+    <div (click)="showDetails[i] = !showDetails[i]" [ngClass]="hasNote[i] == true ? 'subtask__title--up' : 'subtask__title'">
       <span>{{subtask.name}}</span>
     </div>
-    <div class="subtask__message" *ngIf="subtasksCompletedNaEmpty[i] == 1 && showDetails[i]">
+    <div [ngClass]="hasNote[i] == true ? 'subtask--bigger__message' : 'subtask__message'" *ngIf="subtasksCompletedNaEmpty[i] == 1 && showDetails[i]">
       <span >Completed by: {{subtask.result!.person.knownAs}} at {{subtask.result!.completedTime}}</span>
     </div>
-    <div class="subtask__message" *ngIf="subtasksCompletedNaEmpty[i] == 2 && showDetails[i]">
+    <div [ngClass]="hasNote[i] == true ? 'subtask--bigger__message' : 'subtask__message'" *ngIf="subtasksCompletedNaEmpty[i] == 2 && showDetails[i]">
       <span >Marked as N/A by: {{subtask.result!.person.knownAs}} at {{subtask.result!.completedTime}}</span>
     </div>
+    <div class="subtask__notediv" *ngIf="hasNote[i] == true">
+      <img alt="" src="./assets/images/home/open-checklist/note-filled.svg">
+    </div>
     <div class="subtask__action">
-      <button type="button" class="subtask__note">
+      <button type="button" class="subtask__note" *ngIf="subtasksCompletedNaEmpty[i] == 0" (click)="otvoriNewModalNoResult(i, subtask.id)">
         <img alt="" src="./assets/images/home/open-checklist/note.png">
         <span>Note</span>
       </button>
-      <button type="button" class="subtask__na" (click)="markAsNA(subtask.id, subtasksCompletedNaEmpty[i])">
+      <button type="button" class="subtask__note" *ngIf="subtasksCompletedNaEmpty[i] !== 0" (click)="otvoriExistingModalResult(i, subtask.id)">
+        <img alt="" src="./assets/images/home/open-checklist/note.png">
+        <span>Note</span>
+      </button>
+      <button type="button" class="subtask__na" *ngIf="subtasksCompletedNaEmpty[i]==0" (click)="markAsNA(subtask.id, subtasksCompletedNaEmpty[i])">
+        <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
+        <span>N/A</span>
+      </button>
+      <button type="button" class="subtask__na" *ngIf="subtasksCompletedNaEmpty[i]==3 || subtasksCompletedNaEmpty[i]==1 " (click)="markAsNAHasResult(subtask.result!.id, subtask.id, i)">
+        <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
+        <span>N/A</span>
+      </button>
+      <button type="button" class="subtask__na" *ngIf="subtasksCompletedNaEmpty[i]==2" disabled>
         <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
         <span>N/A</span>
       </button>
@@ -69,3 +84,9 @@
                   (cancel)="cancelDeleteSubtask()"
                   [staBrisem]="'task'"></app-delete-modal>
 <app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
+<app-note-modal *ngIf="isNewNoteModalOpen" (cancel)="isNewNoteModalOpen=false"
+                (confirm)="addNoteNoResult($event)" [noteIs]="'new'" [noteValue]="currNoteText"
+                  [title]="currTitleForNote" [subtaskId]="currSubtaskIdForNote" [subtaskIndex]="currSubtaskIndexForNote"></app-note-modal>
+<app-note-modal *ngIf="isExistingNoteModalOpen" (cancel)="isExistingNoteModalOpen=false"
+                (confirm)="addNoteHasResult($event)" [noteIs]="'existing'" [noteValue]="currNoteText"
+                [title]="currTitleForNote" [subtaskId]="currSubtaskIdForNote" [subtaskIndex]="currSubtaskIndexForNote"></app-note-modal>

@@ -19,6 +19,7 @@ import { DeleteModalComponent } from './shared/delete-modal/delete-modal.compone
 import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 import { SetupModalComponent } from './shared/setup-modal/setup-modal.component';
 import { CheckModalComponent } from './shared/check-modal/check-modal.component';
+import { NoteModalComponent } from './shared/note-modal/note-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { CheckModalComponent } from './shared/check-modal/check-modal.component'
     DeleteModalComponent,
     ErrorModalComponent,
     SetupModalComponent,
-    CheckModalComponent
+    CheckModalComponent,
+    NoteModalComponent
   ],
   imports: [
     BrowserModule,

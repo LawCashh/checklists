@@ -28,6 +28,7 @@ export interface Subtask {
     id: string;
     na: boolean;
     completed: boolean;
+    note: string | null;
     "person": {
       "id": string,
       "companyId": string,

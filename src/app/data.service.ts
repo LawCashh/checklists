@@ -32,4 +32,13 @@ export class DataService {
   postSubtaskAsNA(path: string, item: any) {
     return this.http.post(path, item, {'headers': this.loginHeader});
   }
+  putSubtaskAsNA(path: string, item: any) {
+    return this.http.put(path, item, {'headers': this.loginHeader});
+  }
+  postNote(path: string, item: any){
+    return this.http.post(path, item, {'headers': this.loginHeader});
+  }
+  putNote(path: string, item: any){
+    return this.http.put(path, item, {'headers': this.loginHeader});
+  }
 }

@@ -31,10 +31,16 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   isErrorModalOpen = false;
   errorType : "taskAdd" | "taskDelete" = "taskAdd";
   addingSubtaskFormOpen = false;
-  //niz za svaki subtask, 0 je empty, 1 je completed, 2 je n/a, 3 empty but has result
+  //niz za svaki subtask, 0 je empty, 1 je completed, 2 je n/a, 3 has only a note
   subtasksCompletedNaEmpty: number[] = [];
   showDetails: boolean[] = [];
-
+  hasNote: boolean[] = [];
+  isNewNoteModalOpen = false;
+  isExistingNoteModalOpen = false;
+  currTitleForNote = "";
+  currSubtaskIdForNote = "";
+  currSubtaskIndexForNote = 0;
+  currNoteText: string  = "";
 
 
   constructor(private http: DataService, private activatedRoute: ActivatedRoute,
@@ -60,15 +66,21 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                     this.subtasks = res.subTasks;
                     for(let i = 0; i < this.subtasks.length; i++){
                         this.showDetails[i] = false;
+                        this.hasNote[i] = false;
                         let trenutniSubtask = this.subtasks[i];
                         if(trenutniSubtask.result !== null){
                             if(trenutniSubtask.result.completed==true){
                                 this.subtasksCompletedNaEmpty[i] = 1;
+                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
                             }
                             else if (trenutniSubtask.result.na==true){
                                 this.subtasksCompletedNaEmpty[i] = 2;
+                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
                             }
-                            else this.subtasksCompletedNaEmpty[i] = 3;
+                            else {
+                                this.subtasksCompletedNaEmpty[i] = 3;
+                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
+                            }
                         } else this.subtasksCompletedNaEmpty[i] = 0;
                     }
                     console.log("listaaa je " + this.subtasksCompletedNaEmpty);
@@ -191,6 +203,71 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             }
         })
     }
+    markAsNAHasResult(subtaskResultId: string, subtaskId: string, index: number) {
+        //moze samo imati note kao result, ne mogu completeovani task promjeniti u n/a
+        //ignorisi ovo gore, lindon kaze da mogu i na postaviti ako je completed, tako da moze biti i to
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+
+        let note = this.subtasks[index].result!.note;
+        const updatedSubtask = {
+            "id": subtaskResultId,
+            "subTaskId": subtaskId,
+            "companyId": id,
+            "person":{"id":"1490106392118050028",
+                "lastName":"Suite",
+                "firstName":"Synergy",
+                "userName":"synergy",
+                "knownAs":"Synergy Suite",
+                "companyId":"500000000",
+                "personTypeId":"1",
+                "email":"admin+hq@synergysuite.com"},
+            "note": note,
+            "history":"",
+            "taskDate": currDateString,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "completed":false,
+            "lateNotificationSent":null,
+            "overridden":null,
+            "approvalRecordId":null,
+            "na":true,
+        }
+        this.http.putSubtaskAsNA("http://api-development.synergysuite.net/rest/checklists/subtasks/results/"
+            + subtaskResultId, updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno markovao kao na(ima result), res je "+ res);
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska za markovanje kao na(ima result), err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.ucitavanjeCheckliste();
+            }
+        })
+    }
     markAsCompletedNoResult(subtaskId: string) {
         let id = localStorage.getItem("selectedOutlet");
         if (id == null) id = this.shared.outletId;
@@ -241,7 +318,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             }
         })
     }
-    markAsCompletedHasResult(subtaskResultId: string, subtaskId: string) {
+    markAsCompletedHasResult(subtaskResultId: string, subtaskId: string, value: number, index: number) {
         let id = localStorage.getItem("selectedOutlet");
         if (id == null) id = this.shared.outletId;
         let currDate = new Date();
@@ -266,6 +343,16 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
             ".000+01:00";
 
+        let note = this.subtasks[index].result!.note;
+        //2 markovan je kao n/a i mozda ima note
+        //3 ima samo note
+        // if (value==2){
+        //     note = this.subtasks[index].result!.note;
+        // }
+        // else if (value==3){
+        //     note = this.subtasks[index].result!.note;
+        // }
+
         const updatedSubtask = {
             "id": subtaskResultId,
             "subTaskId": subtaskId,
@@ -278,7 +365,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                 "companyId":"500000000",
                 "personTypeId":"1",
                 "email":"admin+hq@synergysuite.com"},
-            "note":null,
+            "note": note,
             "history":"",
             "taskDate": currDateString,
             "completed":true,
@@ -425,4 +512,144 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
       });
   }
 
+    addNoteNoResult(returnedObject: {noteText: string, subtaskId: string, index: number}) {
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+
+        const updatedSubtask = {
+            "subTaskId": returnedObject.subtaskId,
+            "companyId": id,
+            "person":{"id":this.shared.userId},
+            "taskDate": currDateString,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "completed":false,
+            "na":false,
+            "note": returnedObject.noteText
+        }
+        this.http.postNote("http://api-development.synergysuite.net/rest/checklists/subtasks/results/",
+            updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno dodao note(no results prior) "+ res);
+                this.isNewNoteModalOpen = false;
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska dodavanja note-a (no results prior), err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.isNewNoteModalOpen = false;
+                this.ucitavanjeCheckliste();
+            }
+        })
+    }
+
+    addNoteHasResult(returnedObject: {noteText: string, subtaskId: string, index: number}) {
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+        let completed = false;
+        let na = false;
+        if(this.subtasks[returnedObject.index].result!.completed == true) completed = true;
+        if(this.subtasks[returnedObject.index].result!.na == true) na = true;
+        let subtaskResultId = this.subtasks[returnedObject.index].result!.id;
+        const updatedSubtask = {
+            "id": subtaskResultId,
+            "subTaskId": returnedObject.subtaskId,
+            "companyId": id,
+            "person":{"id": this.shared.userId,
+                "lastName":"Suite",
+                "firstName":"Synergy",
+                "userName":"synergy",
+                "knownAs":"Synergy Suite",
+                "companyId":"500000000",
+                "personTypeId":"1",
+                "email":"admin+hq@synergysuite.com"},
+            "taskDate": currDateString,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "completed":completed,
+            "na":na,
+            "note": returnedObject.noteText,
+            "history":"",
+            "lateNotificationSent":null,
+            "overridden":null,
+            "approvalRecordId":null,
+        }
+        this.http.putNote("http://api-development.synergysuite.net/rest/checklists/subtasks/results/"
+            + subtaskResultId, updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno dodao note(has results prior) "+ res);
+                this.isExistingNoteModalOpen = false;
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska dodavanja note-a (has results prior), err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.isExistingNoteModalOpen = false;
+                this.ucitavanjeCheckliste();
+            }
+        })
+    }
+
+    otvoriNewModalNoResult(index: number, subtaskId: string) {
+      this.currTitleForNote = this.subtasks[index].name;
+      this.currNoteText = "";
+      this.currSubtaskIdForNote = this.subtasks[index].id;
+      this.currSubtaskIndexForNote = index;
+      this.isNewNoteModalOpen = true;
+    }
+
+    otvoriExistingModalResult(index: number, subtaskId: string) {
+        this.currTitleForNote = this.subtasks[index].name;
+        this.currSubtaskIdForNote = this.subtasks[index].id;
+        this.currSubtaskIndexForNote = index;
+        let noteText = this.subtasks[index].result!.note;
+        if(noteText !== null)
+        this.currNoteText = noteText;
+        else this.currNoteText = "";
+        this.isExistingNoteModalOpen = true;
+    }
 }
