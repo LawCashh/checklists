@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-note-modal',
@@ -18,12 +19,13 @@ export class NoteModalComponent implements OnInit{
   ngOnInit(): void {
     this.noteNameTwoWay = this.noteValue;
   }
-  onConfirm(): void {
+  onConfirm(noteForm: NgForm): void {
     this.confirm.emit({
       noteText: this.noteNameTwoWay,
       subtaskId: this.subtaskId,
       index: this.subtaskIndex
     });
+    noteForm.resetForm();
   }
 
   onCancel(): void {

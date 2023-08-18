@@ -71,15 +71,15 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                         if(trenutniSubtask.result !== null){
                             if(trenutniSubtask.result.completed==true){
                                 this.subtasksCompletedNaEmpty[i] = 1;
-                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
+                                if(trenutniSubtask.result.note !==null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
                             }
                             else if (trenutniSubtask.result.na==true){
                                 this.subtasksCompletedNaEmpty[i] = 2;
-                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
+                                if(trenutniSubtask.result.note !==null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
                             }
                             else {
                                 this.subtasksCompletedNaEmpty[i] = 3;
-                                if(trenutniSubtask.result.note !==null) this.hasNote[i] = true;
+                                if(trenutniSubtask.result.note !==null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
                             }
                         } else this.subtasksCompletedNaEmpty[i] = 0;
                     }
@@ -595,6 +595,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         if(this.subtasks[returnedObject.index].result!.completed == true) completed = true;
         if(this.subtasks[returnedObject.index].result!.na == true) na = true;
         let subtaskResultId = this.subtasks[returnedObject.index].result!.id;
+
         const updatedSubtask = {
             "id": subtaskResultId,
             "subTaskId": returnedObject.subtaskId,
@@ -647,7 +648,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         this.currSubtaskIdForNote = this.subtasks[index].id;
         this.currSubtaskIndexForNote = index;
         let noteText = this.subtasks[index].result!.note;
-        if(noteText !== null)
+        if(noteText !== null && noteText !== "")
         this.currNoteText = noteText;
         else this.currNoteText = "";
         this.isExistingNoteModalOpen = true;

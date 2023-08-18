@@ -1,26 +1,26 @@
+<!--Ovdje sam makao required za input, zakomentarisao unesite note i makao disabled na save za invalid form-->
 <div class="modal">
     <div class="modal__content">
         <div class="modal__content__title">
             <span>{{title}} - Note</span>
         </div>
-        <form *ngIf="noteIs=='new'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm()" novalidate>
+        <form *ngIf="noteIs=='new'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm(noteForm)" novalidate>
             <input class="modal__content__form__input"
                    name="noteName"
                    [(ngModel)]="noteNameTwoWay"
                    placeholder="Type a new note here..."
-                   required
                    #noteInput
                    #name="ngModel"
                    type="text" >
-            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">
-                <span>Unesite note.</span>
-            </div>
+<!--            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">-->
+<!--                <span>Unesite note.</span>-->
+<!--            </div>-->
             <div class="modal__buttons">
                 <button class="modal__buttons__cancel" (click)="onCancel()" >Cancel</button>
-                <button class="modal__buttons__save" type="submit" [disabled]="!noteForm.valid">Save</button>
+                <button class="modal__buttons__save" type="submit">Save</button>
             </div>
         </form>
-        <form *ngIf="noteIs=='existing'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm()" novalidate>
+        <form *ngIf="noteIs=='existing'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm(noteForm)" novalidate>
             <input class="modal__content__form__input"
                    name="noteName"
                    [(ngModel)]="noteNameTwoWay"
@@ -29,12 +29,12 @@
                    #noteInput
                    #name="ngModel"
                    type="text" >
-            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">
-                <span>Unesite note.</span>
-            </div>
+<!--            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">-->
+<!--                <span>Unesite note.</span>-->
+<!--            </div>-->
             <div class="modal__buttons">
                 <button class="modal__buttons__cancel" (click)="onCancel()" >Cancel</button>
-                <button class="modal__buttons__save" type="submit" [disabled]="!noteForm.valid">Save</button>
+                <button class="modal__buttons__save" type="submit">Save</button>
             </div>
         </form>
     </div>
