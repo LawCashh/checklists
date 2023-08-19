@@ -7,8 +7,13 @@
         <div class="hamburger__line"></div>
       </a>
     </div>
-    <div class="nav__item" *ngIf="isSetupRoute()">
+    <div class="nav__item" *ngIf="isChecklistSetupRoute()">
       <a class="nav__link left-arrow" (click)="goBackFromSetupChecklist()">
+        <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
+      </a>
+    </div>
+    <div class="nav__item" *ngIf="isSubtaskSetupRoute()">
+      <a class="nav__link left-arrow" (click)="goBackFromSetupSubtask()">
         <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
       </a>
     </div>
@@ -21,13 +26,19 @@
       <a class="nav__link">
         <span class="nav__logo" *ngIf="isRootRoute()">Checklists</span>
         <span class="nav__logo" *ngIf="isOpenChecklistRoute()">Checklist</span>
-        <span class="nav__logo" *ngIf="isSetupRoute()">Checklist setup</span>
+        <span class="nav__logo" *ngIf="isChecklistSetupRoute()">Checklist setup</span>
+        <span class="nav__logo" *ngIf="isSubtaskSetupRoute()">Task setup</span>
       </a>
     </div>
     <div class="nav__item separator"></div>
-    <div class="nav__item" *ngIf="isSetupRoute()">
+    <div class="nav__item" *ngIf="isChecklistSetupRoute()">
       <a class="nav__link binlink" >
         <img alt="" src="./assets/images/home/setup-checklist/trash-can2.svg" (click)="deleteChecklistFromSetup()">
+      </a>
+    </div>
+    <div class="nav__item" *ngIf="isSubtaskSetupRoute()">
+      <a class="nav__link binlink" >
+        <img alt="" src="./assets/images/home/setup-checklist/trash-can2.svg" (click)="deleteSubtaskFromSetup()">
       </a>
     </div>
     <div class="nav__item">

@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit{
   ngOnInit(): void {
 
   }
-  isSetupRoute() {
+  isChecklistSetupRoute() {
       return this.router.url.includes("setup-checklist");
   }
 
@@ -46,4 +46,15 @@ export class HeaderComponent implements OnInit{
     this.router.navigate(["setup-checklist", checklistId]);
   }
 
+  isSubtaskSetupRoute() {
+    return this.router.url.includes("setup-subtask");
+  }
+
+  goBackFromSetupSubtask() {
+    this.shared.setSetupCheckModal(true);
+  }
+
+  deleteSubtaskFromSetup() {
+    this.shared.setSetupDeleteModal(true);
+  }
 }

@@ -169,6 +169,32 @@
       border-radius: 100px;
       padding: 2px 5px;
     }
+    &__statuses{
+      position: absolute;
+      right: calc(180px + 0px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 40px;
+      margin-right: 10px;
+      &__stardiv, &__exclamationdiv{
+        margin-left: 4px;
+        margin-right: 4px;
+        img{
+          width: 20px;
+        }
+      }
+      &__stardiv{
+        img{
+          filter: invert(88%) sepia(81%) saturate(2891%) hue-rotate(322deg) brightness(101%) contrast(97%);
+        }
+      }
+      &__exclamationdiv{
+        img{
+          filter: invert(46%) sepia(51%) saturate(753%) hue-rotate(314deg) brightness(95%) contrast(99%);
+        }
+      }
+    }
     &__add{
       padding: 10px;
       background-color: #38acdc;

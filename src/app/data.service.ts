@@ -18,6 +18,9 @@ export class DataService {
   deleteChecklist(path: string, checklistId: string) {
     return this.http.delete(path + checklistId, {'headers': this.loginHeader});
   }
+  deleteSubtask(path: string, subtaskId: string) {
+    return this.http.delete(path + subtaskId, {'headers': this.loginHeader});
+  }
   postSubtask(path: string, item: any) {
     return this.http.post(path, item, {'headers': this.loginHeader});
   }

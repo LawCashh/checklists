@@ -10,8 +10,6 @@ import { FooterComponent } from './footer/footer.component';
 import { ChecklistListComponent } from './home/checklist-list/checklist-list.component';
 import { ChecklistSetupComponent } from './home/checklist-setup/checklist-setup.component';
 import { ChecklistItemComponent } from './home/checklist-list/checklist-item/checklist-item.component';
-import { SubtaskListComponent } from './home/checklist-list/checklist-item/subtask-list/subtask-list.component';
-import { SubtaskComponent } from './home/checklist-list/checklist-item/subtask-list/subtask/subtask.component';
 import { OutletListComponent } from './home/outlet-list/outlet-list.component';
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
@@ -20,6 +18,7 @@ import { ErrorModalComponent } from './shared/error-modal/error-modal.component'
 import { SetupModalComponent } from './shared/setup-modal/setup-modal.component';
 import { CheckModalComponent } from './shared/check-modal/check-modal.component';
 import { NoteModalComponent } from './shared/note-modal/note-modal.component';
+import { SubtaskSetupComponent } from './home/checklist-list/subtask-setup/subtask-setup.component';
 
 @NgModule({
   declarations: [
@@ -30,14 +29,13 @@ import { NoteModalComponent } from './shared/note-modal/note-modal.component';
     ChecklistListComponent,
     ChecklistSetupComponent,
     ChecklistItemComponent,
-    SubtaskListComponent,
-    SubtaskComponent,
     OutletListComponent,
     DeleteModalComponent,
     ErrorModalComponent,
     SetupModalComponent,
     CheckModalComponent,
-    NoteModalComponent
+    NoteModalComponent,
+    SubtaskSetupComponent
   ],
   imports: [
     BrowserModule,

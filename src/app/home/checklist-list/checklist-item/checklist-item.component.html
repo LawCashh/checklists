@@ -35,6 +35,14 @@
     <div class="subtask__notediv" *ngIf="hasNote[i] == true"  (click)="otvoriExistingModalResult(i, subtask.id)">
       <img alt="" src="./assets/images/home/open-checklist/note-filled.svg">
     </div>
+    <div class="subtask__statuses">
+      <div class="subtask__statuses__stardiv" *ngIf="isImportant[i] == true">
+        <img alt="" src="./assets/images/home/open-checklist/star-solid.svg">
+      </div>
+      <div class="subtask__statuses__exclamationdiv" *ngIf="isUrgent[i] == true">
+        <img alt="" src="./assets/images/home/open-checklist/exclamation-circle-solid.svg">
+      </div>
+    </div>
     <div class="subtask__action">
       <button type="button" class="subtask__note" *ngIf="subtasksCompletedNaEmpty[i] == 0" (click)="otvoriNewModalNoResult(i, subtask.id)">
         <img alt="" src="./assets/images/home/open-checklist/note.png">
@@ -56,7 +64,7 @@
         <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
         <span>N/A</span>
       </button>
-      <button type="button" class="subtask__setup">
+      <button type="button" class="subtask__setup" (click)="setupSubtask(subtask.id)">
         <img alt="" src="./assets/images/home/checklist-list/gear.svg">
         <span>Setup</span>
       </button>

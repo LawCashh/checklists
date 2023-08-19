@@ -8,7 +8,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class ErrorModalComponent {
   @Output() close = new EventEmitter<void>();
   @Input() kojiError: "checklistAdd" | "checklistDelete" | "taskAdd"
-    | "taskDelete" | "checklistEdit" = "checklistAdd";
+    | "taskDelete" | "checklistEdit" | "taskEdit" = "checklistAdd";
 
   onClose(): void {
     this.close.emit();

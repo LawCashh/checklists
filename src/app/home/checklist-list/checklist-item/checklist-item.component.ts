@@ -35,6 +35,8 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   subtasksCompletedNaEmpty: number[] = [];
   showDetails: boolean[] = [];
   hasNote: boolean[] = [];
+  isImportant: boolean[] = [];
+  isUrgent: boolean[] = [];
   isNewNoteModalOpen = false;
   isExistingNoteModalOpen = false;
   currTitleForNote = "";
@@ -68,6 +70,10 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                         this.showDetails[i] = false;
                         this.hasNote[i] = false;
                         let trenutniSubtask = this.subtasks[i];
+                        if(trenutniSubtask.important == true)
+                            this.isImportant[i] = true; else this.isImportant[i] = false;
+                        if(trenutniSubtask.urgent == true)
+                            this.isUrgent[i] = true; else this.isUrgent[i] = false;
                         if(trenutniSubtask.result !== null){
                             if(trenutniSubtask.result.completed==true){
                                 this.subtasksCompletedNaEmpty[i] = 1;
@@ -84,6 +90,8 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                         } else this.subtasksCompletedNaEmpty[i] = 0;
                     }
                     console.log("listaaa je " + this.subtasksCompletedNaEmpty);
+                    console.log("listaaaa je " + this.isImportant);
+                    console.log("listaaaaa je " + this.isUrgent);
                     this.isLoadingOpenChecklist = false;
                 },
                 error: err => {
@@ -652,5 +660,9 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         this.currNoteText = noteText;
         else this.currNoteText = "";
         this.isExistingNoteModalOpen = true;
+    }
+
+    setupSubtask(id: string) {
+        this.router.navigate(["setup-subtask", id]);
     }
 }

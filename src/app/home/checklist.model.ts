@@ -89,3 +89,43 @@ export interface ChecklistFull {
   [key: string]: any;
 }
 
+export interface SubtaskFull {
+  "id": string;
+  "taskId": string;
+  "dependsOn": string | null;
+  "name": string;
+  "description": string | null;
+  "linkedWizard": string | null;
+  "wizardId": string | null;
+  "wizardArguments": string | null;
+  "wizardMarksComplete": boolean;
+  "urgent": boolean;
+  "important": boolean;
+  "validDays": string | null;
+  "validDates": string | null;
+  "lastDayOfMonth": boolean;
+  "completeByTime": string | null;
+  "rank": number;
+  "overridable": boolean;
+  "deleted": boolean;
+  "deletedTime": string | null;
+  "createdByUser": string;
+  "createdDateTime": string;
+  "modifiedByUser": string | null;
+  "modifiedDateTime": string | null;
+  "dueTimeRelative": string | null;
+  "dueTimeAbsolute": string | null;
+  "answerTypeId": string | null;
+  "paused": boolean | null;
+  "libraryFileId": string | null;
+  "photoRequired": boolean | null;
+  "noteRequired": boolean | null;
+  "dueDate": string | null;
+  "taskLastDayOfMonth": boolean;
+  "taskValidDays": string | null;
+  "taskEnabledForCompanies": string[] | null;
+  "subTaskEnabledForCompanies": string[] | null;
+  "companyId": string | null;
+  "wfSubTaskResultBean": string | null
+}
+

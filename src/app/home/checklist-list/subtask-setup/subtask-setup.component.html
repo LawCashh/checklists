@@ -1,0 +1,58 @@
+<div class="loader" *ngIf="isLoadingSetup">
+    <span class="loader__spinner"></span>
+</div>
+<div class="setup" *ngIf="!isLoadingSetup">
+    <form class="setup__form" #setupSubtaskForm="ngForm"
+
+    >
+        <div class="setup__form__name">
+            <label for="name">Subtask Name <sup>*</sup></label>
+            <input type="text"
+                   id="name" name="name" placeholder="Start typing the name here.."
+                   [(ngModel)]="name"
+                   required
+                   #nameInput="ngModel">
+            <div *ngIf="nameInput.invalid && nameInput.dirty" class="setup__form__name__error">
+                <span>Unesite ime.</span>
+            </div>
+        </div>
+        <div class="setup__form__description">
+            <label for="description">Subtask Description</label>
+            <textarea rows="6" cols="100" maxlength="250" id="description"
+                      [(ngModel)]="descText" name="description"
+                      (input)="updateDescLength()" placeholder="Start typing the description here.."></textarea>
+        </div>
+        <span class="setup__form__description__span">{{currDescLength}}/{{maxDescLength}}</span>
+
+        <div class="setup__form__radiodiv margintop50">
+            <input class="setup__form__radiodiv__checkbox" type="checkbox" id="checkmark-lastday" name="checkmark-lastday"
+                   [(ngModel)]="lastDay">
+            <label for="checkmark-lastday">Checklist to be completed at the last day of the month</label>
+        </div>
+        <div class="setup__form__radiodiv">
+            <input class="setup__form__radiodiv__checkbox" type="checkbox" id="checkmark-important" name="checkmark-important"
+                   [(ngModel)]="important">
+            <label for="checkmark-important">Important task</label>
+        </div>
+        <div class="setup__form__radiodiv">
+            <input class="setup__form__radiodiv__checkbox" type="checkbox" id="checkmark-urgent" name="checkmark-urgent"
+                   [(ngModel)]="urgent">
+            <label for="checkmark-urgent">Urgent task</label>
+        </div>
+        <div class="setup__form__buttonsdiv">
+            <div class="setup__form__buttonsdiv__buttons">
+                <button type="button" (click)="isCheckModalOpen=true">Cancel</button>
+                <button type="button" (click)="setupSubtask(setupSubtaskForm)" [disabled]="!setupSubtaskForm.valid">Save</button>
+            </div>
+        </div>
+        <app-check-modal *ngIf="isCheckModalOpen" (cancel)="isCheckModalOpen=false" (confirm)="cancelEverything(setupSubtaskForm)"></app-check-modal>
+        <app-setup-modal *ngIf="isSaveModalOpen" (confirm)="confirmSetupSubtask(setupSubtaskForm)"
+                         (cancel)="cancelSetupSubtask()"
+                         [staSetupujem]="'task'"></app-setup-modal>
+    </form>
+</div>
+<app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
+<app-delete-modal *ngIf="isDeleteModalOpen" [staBrisem]="'task'"
+                  (cancel)="isDeleteModalOpen=false" (confirm)="brisanjeSubtaskaIzSetupa()"></app-delete-modal>
+
+
