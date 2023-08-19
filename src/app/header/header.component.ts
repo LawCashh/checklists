@@ -57,4 +57,11 @@ export class HeaderComponent implements OnInit{
   deleteSubtaskFromSetup() {
     this.shared.setSetupDeleteModal(true);
   }
+  isErrorRoute() {
+    return this.router.url.includes("error");
+  }
+
+  goHome() {
+    this.router.navigate([""]);
+  }
 }

@@ -73,6 +73,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
         },
         error: err => {
           console.log("error za get detalja checkliste, error je " + err);
+          this.router.navigate(["error"]);
         }
       }
     );
@@ -105,7 +106,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
         console.log("Updateovana checklista, response je " +
           JSON.stringify(res));
         setupChecklistForm.resetForm();
-        this.idiNaRoot();
+        this.idiNazad();
       },
       error: err => {
         console.log("error na update checkliste, response je " +
@@ -123,7 +124,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   }
   cancelEverything(setupChecklistForm: NgForm){
      setupChecklistForm.resetForm();
-     this.idiNaRoot();
+     this.idiNazad();
   }
   idiNaRoot() {
     this.router.navigate([""])
@@ -133,6 +134,15 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
       .catch(error => {
         console.error('Navigation error', error);
       });
+  }
+  idiNazad() {
+    this.router.navigate(["open-checklist", this.checklistObject.id])
+        .then(() => {
+          console.log('Navigation successful');
+        })
+        .catch(error => {
+          console.error('Navigation error', error);
+        });
   }
   cancelSetupChecklist() {
       this.isSaveModalOpen = false;

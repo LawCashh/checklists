@@ -3,6 +3,7 @@ import {DataService} from "../../data.service";
 import {Outlet} from "./outlet.model";
 import {SharedService} from "../../shared/shared.service";
 import {Observable, Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-outlet-list',
@@ -16,7 +17,7 @@ export class OutletListComponent implements OnInit, OnDestroy {
   @ViewChild('outletsSRef') outletsSRef : HTMLSelectElement | undefined;
   selectedOutlet = "500000101";
   @Output('optionEmitter') optionEmitter: EventEmitter<string> = new EventEmitter();
-  constructor(private http: DataService, private shared: SharedService) {
+  constructor(private http: DataService, private shared: SharedService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -31,6 +32,7 @@ export class OutletListComponent implements OnInit, OnDestroy {
         },
         error: err => {
           console.log("greska "+ err);
+          this.router.navigate(["error"]);
         }
       })
   }

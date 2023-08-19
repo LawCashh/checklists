@@ -11,12 +11,12 @@
     </span>
   </div>
   <div [ngClass]="hasNote[i] == true ? 'subtask--bigger' : 'subtask'"
-       (mousedown)="onMouseDown($event)"
-       (touchstart)="onTouchStart($event)"
-       (touchmove)="onTouchMove($event)"
-       (mouseup)="onMouseUp($event)"
-       (touchend)="onTouchEnd($event)"
-       (mousemove)="onMouseMove($event)" *ngFor="let subtask of subtasks; index as i">
+       (mousedown)="onMouseDown($event, parentDiv)"
+       (touchstart)="onTouchStart($event, parentDiv)"
+       (touchmove)="onTouchMove($event, parentDiv)"
+       (mouseup)="onMouseUp($event, parentDiv)"
+       (touchend)="onTouchEnd($event, parentDiv)"
+       (mousemove)="onMouseMove($event, parentDiv)" #parentDiv *ngFor="let subtask of subtasks; index as i">
     <div class="subtask__circle">
       <div *ngIf="subtasksCompletedNaEmpty[i]==1" class="subtask__circle__div--completed">&#10003;</div>
         <div *ngIf="subtasksCompletedNaEmpty[i]==0" class="subtask__circle__div--empty" (click)="markAsCompletedNoResult(subtask.id)"></div>
@@ -87,7 +87,7 @@
   </form>
   <div class="subtask__add" *ngIf="!addingSubtask" (click)="goToAddSubtask()">+</div>
 </div>
-<app-check-modal *ngIf="isOpenChecklistModalOpen" (cancel)="isOpenChecklistModalOpen=false" (confirm)="idiNaRoot()"></app-check-modal>
+<app-check-modal *ngIf="isCheckModalOpen" (cancel)="isCheckModalOpen=false" (confirm)="idiNaRoot()"></app-check-modal>
 <app-delete-modal *ngIf="isDeleteModalOpen" (confirm)="confirmDeleteSubtask()"
                   (cancel)="cancelDeleteSubtask()"
                   [staBrisem]="'task'"></app-delete-modal>

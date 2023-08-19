@@ -19,7 +19,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   name = "";
   descText : string | null = "";
   openChecklistModalSubscription = new Subscription();
-  isOpenChecklistModalOpen = false;
+  isCheckModalOpen = false;
   startX: number = 0;
   startY: number = 0;
   addingSubtask = false;
@@ -52,7 +52,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.checklistId = this.activatedRoute.snapshot.params['id'];
     this.openChecklistModalSubscription = this.shared.getOpenChecklistModalObservable().subscribe(value => {
-        this.isOpenChecklistModalOpen = value;
+        this.isCheckModalOpen = value;
     });
     this.ucitavanjeCheckliste();
   }
@@ -96,6 +96,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                 },
                 error: err => {
                     console.log("error get detalja checkliste sa subtaskovima, error je " + err);
+                    this.router.navigate(["error"]);
                 }
             }
         );
@@ -414,6 +415,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                   + firstResponse);
           })
       );
+      //return this.http.getData<Checklist>("http://api-development.synergysuite.net/rest/checklists/tasks/1692460786470763950/subtasks?id=1692460786470763950&companyId=1554480163370603615&personId=1490106392118050028&date=2023-08-19");
   }
   idiNaRoot() {
       this.router.navigate([""])
@@ -431,18 +433,18 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         + outlet);
   }
 
-    onTouchStart(event: TouchEvent) {
+    onTouchStart(event: TouchEvent, parentDiv: HTMLDivElement) {
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
         this.isSwiping = true;
     }
 
 
-    onTouchEnd(event: TouchEvent) {
+    onTouchEnd(event: TouchEvent, parentDiv: HTMLDivElement) {
         this.isSwiping = false;
         let target = event.target as HTMLElement;
-        if (target.style.transform !== 'translateX(-180px)'){
-            target.style.transform = 'translateX(0)';
+        if (parentDiv.style.transform !== 'translateX(-180px)'){
+            parentDiv.style.transform = 'translateX(0)';
             setTimeout(() => {
                 this.addingSubtask = false;
             }, 200);
@@ -451,21 +453,21 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
         else this.addingSubtask = true;
     }
 
-    onTouchMove(event: TouchEvent) {
+    onTouchMove(event: TouchEvent, parentDiv: HTMLDivElement) {
         let target = event.target as HTMLElement;
         if (!this.isSwiping) return;
         const deltaX = event.touches[0].clientX - this.startX;
         const deltaY = event.touches[0].clientY - this.startY;
-        const maxDelta = target.offsetWidth - window.innerWidth;
+        const maxDelta = parentDiv.offsetWidth - window.innerWidth;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             if (deltaX < 0) {
-                target.style.transform = `translateX(${-Math.min(
+                parentDiv.style.transform = `translateX(${-Math.min(
                     -deltaX,
                     maxDelta
                 )}px)`;
             } else {
                 let delta = -(-180 + deltaX);
-                target.style.transform = `translateX(${-Math.min(
+                parentDiv.style.transform = `translateX(${-Math.min(
                     delta,
                     maxDelta
                 )}px)`;
@@ -475,31 +477,31 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
 
         }
     }
-    onMouseDown(event: MouseEvent) {
+    onMouseDown(event: MouseEvent, parentDiv: HTMLDivElement) {
         this.startX = event.clientX;
         //this.startY = event.clientY;
         this.isSwiping = true;
     }
-    onMouseUp(event: MouseEvent) {
+    onMouseUp(event: MouseEvent, parentDiv: HTMLDivElement) {
         this.isSwiping = false;
         let target = event.target as HTMLElement;
-        if (target.style.transform !== 'translateX(-180px)')
-            target.style.transform = 'translateX(0)';
+        if (parentDiv.style.transform !== 'translateX(-180px)')
+            parentDiv.style.transform = 'translateX(0)';
     }
-    onMouseMove(event: MouseEvent) {
+    onMouseMove(event: MouseEvent, parentDiv: HTMLDivElement) {
         let target = event.target as HTMLElement;
         if (!this.isSwiping) return;
         const deltaX = event.clientX - this.startX;
-        const maxDelta = target.offsetWidth - window.innerWidth;
+        const maxDelta = parentDiv.offsetWidth - window.innerWidth;
 
         if (deltaX < 0) {
-            target.style.transform = `translateX(${-Math.min(
+            parentDiv.style.transform = `translateX(${-Math.min(
                 -deltaX,
                 maxDelta
             )}px)`;
         } else {
             let delta = -(-180 + deltaX);
-            target.style.transform = `translateX(${-Math.min(
+            parentDiv.style.transform = `translateX(${-Math.min(
                 delta,
                 maxDelta
             )}px)`;
@@ -665,4 +667,5 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
     setupSubtask(id: string) {
         this.router.navigate(["setup-subtask", id]);
     }
+
 }

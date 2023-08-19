@@ -19,6 +19,7 @@ import { SetupModalComponent } from './shared/setup-modal/setup-modal.component'
 import { CheckModalComponent } from './shared/check-modal/check-modal.component';
 import { NoteModalComponent } from './shared/note-modal/note-modal.component';
 import { SubtaskSetupComponent } from './home/checklist-list/subtask-setup/subtask-setup.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SubtaskSetupComponent } from './home/checklist-list/subtask-setup/subta
     SetupModalComponent,
     CheckModalComponent,
     NoteModalComponent,
-    SubtaskSetupComponent
+    SubtaskSetupComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

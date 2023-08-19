@@ -74,6 +74,7 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
           },
           error: err => {
             console.log("error za get detalja subtaska, error je " + err);
+            this.router.navigate(["error"]);
           }
         }
     );
@@ -164,4 +165,5 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
       }
     });
   }
+
 }

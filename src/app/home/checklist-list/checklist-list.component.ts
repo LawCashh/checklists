@@ -31,6 +31,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   completedSubtasksForChecklist: number[] = [];
   numberOfSubtasksForChecklist: number[] = [];
   addingChecklistFormOpen = false;
+  //isDragging = false; mozda za desktop verziju, mozda iskoristi isSwiping
 
   constructor(private http: DataService, private shared: SharedService,
               private elementRef : ElementRef, private renderer: Renderer2,
@@ -67,6 +68,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         this.isLoadingChecklists = false;
       }, error: err => {
         console.log("err makeHttpCallAfterSubject " + err);
+        this.router.navigate(["error"]);
       }
     });
     let id = localStorage.getItem(`selectedOutlet`);
@@ -103,18 +105,18 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     this.isErrorModalOpen = false;
     this.ucitavanjeChecklisti();
   }
-  onTouchStart(event: TouchEvent) {
+  onTouchStart(event: TouchEvent, parentDiv: HTMLDivElement) {
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
     this.isSwiping = true;
   }
 
 
-  onTouchEnd(event: TouchEvent) {
+  onTouchEnd(event: TouchEvent, parentDiv: HTMLDivElement) {
     this.isSwiping = false;
     let target = event.target as HTMLElement;
-    if (target.style.transform !== 'translateX(-120px)'){
-      target.style.transform = 'translateX(0)';
+    if (parentDiv.style.transform !== 'translateX(-120px)'){
+      parentDiv.style.transform = 'translateX(0)';
       setTimeout(() => {
         this.addingChecklist = false;
       }, 200);
@@ -123,21 +125,21 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     else this.addingChecklist = true;
   }
 
-  onTouchMove(event: TouchEvent) {
+  onTouchMove(event: TouchEvent, parentDiv: HTMLDivElement) {
     let target = event.target as HTMLElement;
     if (!this.isSwiping) return;
     const deltaX = event.touches[0].clientX - this.startX;
     const deltaY = event.touches[0].clientY - this.startY;
-    const maxDelta = target.offsetWidth - window.innerWidth;
+    const maxDelta = parentDiv.offsetWidth - window.innerWidth;
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
-        target.style.transform = `translateX(${-Math.min(
+        parentDiv.style.transform = `translateX(${-Math.min(
             -deltaX,
             maxDelta
         )}px)`;
       } else {
         let delta = -(-120 + deltaX);
-        target.style.transform = `translateX(${-Math.min(
+        parentDiv.style.transform = `translateX(${-Math.min(
             delta,
             maxDelta
         )}px)`;
@@ -147,31 +149,31 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
 
     }
   }
-  onMouseDown(event: MouseEvent) {
+  onMouseDown(event: MouseEvent, parentDiv: HTMLDivElement) {
     this.startX = event.clientX;
     //this.startY = event.clientY;
     this.isSwiping = true;
   }
-  onMouseUp(event: MouseEvent) {
+  onMouseUp(event: MouseEvent, parentDiv: HTMLDivElement) {
     this.isSwiping = false;
     let target = event.target as HTMLElement;
-    if (target.style.transform !== 'translateX(-120px)')
-      target.style.transform = 'translateX(0)';
+    if (parentDiv.style.transform !== 'translateX(-120px)')
+      parentDiv.style.transform = 'translateX(0)';
   }
-  onMouseMove(event: MouseEvent) {
+  onMouseMove(event: MouseEvent, parentDiv: HTMLDivElement) {
     let target = event.target as HTMLElement;
     if (!this.isSwiping) return;
     const deltaX = event.clientX - this.startX;
-    const maxDelta = target.offsetWidth - window.innerWidth;
+    const maxDelta = parentDiv.offsetWidth - window.innerWidth;
 
     if (deltaX < 0) {
-      target.style.transform = `translateX(${-Math.min(
+      parentDiv.style.transform = `translateX(${-Math.min(
           -deltaX,
           maxDelta
       )}px)`;
     } else {
       let delta = -(-120 + deltaX);
-      target.style.transform = `translateX(${-Math.min(
+      parentDiv.style.transform = `translateX(${-Math.min(
           delta,
           maxDelta
       )}px)`;
@@ -207,8 +209,10 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
     );
   }
   getBusinessDate (){
+      let outlet = localStorage.getItem('selectedOutlet');
+      if(outlet == null) outlet = this.shared.outletId;
       return this.http.getData<string>("http://api-development.synergysuite.net/rest/companyDates/currentBusinessDate/"
-      + this.outletId);
+      + outlet);
   }
 
   goToAddChecklist() {

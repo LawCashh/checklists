@@ -12,6 +12,11 @@
         <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
       </a>
     </div>
+    <div class="nav__item" *ngIf="isErrorRoute()">
+      <a class="nav__link left-arrow" (click)="goHome()">
+        <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
+      </a>
+    </div>
     <div class="nav__item" *ngIf="isSubtaskSetupRoute()">
       <a class="nav__link left-arrow" (click)="goBackFromSetupSubtask()">
         <img alt="" src="./assets/images/home/setup-checklist/arrow-left.svg">
@@ -28,6 +33,7 @@
         <span class="nav__logo" *ngIf="isOpenChecklistRoute()">Checklist</span>
         <span class="nav__logo" *ngIf="isChecklistSetupRoute()">Checklist setup</span>
         <span class="nav__logo" *ngIf="isSubtaskSetupRoute()">Task setup</span>
+        <span class="nav__logo" *ngIf="isErrorRoute()">Error</span>
       </a>
     </div>
     <div class="nav__item separator"></div>
