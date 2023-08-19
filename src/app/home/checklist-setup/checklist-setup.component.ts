@@ -106,7 +106,11 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
         console.log("Updateovana checklista, response je " +
           JSON.stringify(res));
         setupChecklistForm.resetForm();
-        this.idiNazad();
+        if(this.shared.naSetupSaRoot == true){
+          this.shared.naSetupSaRoot = false;
+          this.idiNaRoot();
+        }
+        else this.idiNazad();
       },
       error: err => {
         console.log("error na update checkliste, response je " +
@@ -120,7 +124,11 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
 
   error() {
     this.isErrorModalOpen = false;
-    this.idiNaRoot();
+    if(this.shared.naSetupSaRoot == true){
+      this.shared.naSetupSaRoot = false;
+      this.idiNaRoot();
+    }
+    else this.idiNazad();
   }
   cancelEverything(setupChecklistForm: NgForm){
      setupChecklistForm.resetForm();
