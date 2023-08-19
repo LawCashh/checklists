@@ -273,6 +273,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   }
 
   setupChecklist(id: string) {
+      this.shared.naSetupSaRoot = true;
       this.router.navigate(["setup-checklist", id]);
   }
   openChecklist(id: string) {

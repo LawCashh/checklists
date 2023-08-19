@@ -124,7 +124,11 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   }
   cancelEverything(setupChecklistForm: NgForm){
      setupChecklistForm.resetForm();
-     this.idiNazad();
+     if(this.shared.naSetupSaRoot == true){
+       this.shared.naSetupSaRoot = false;
+       this.idiNaRoot();
+     }
+     else this.idiNazad();
   }
   idiNaRoot() {
     this.router.navigate([""])

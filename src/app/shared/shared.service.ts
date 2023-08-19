@@ -17,6 +17,7 @@ export class SharedService {
   setupDeleteModalSubject = new Subject<boolean>();
   openChecklistModal = false;
   openChecklistModalSubject: Subject<boolean> = new Subject<boolean>();
+  naSetupSaRoot = false;
   constructor(private http: HttpClient) { }
 
   changeOutlet(newId: string){
