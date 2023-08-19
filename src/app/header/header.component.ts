@@ -38,7 +38,10 @@ export class HeaderComponent implements OnInit{
   }
 
   goBackFromOpenChecklist() {
-    this.shared.setOpenChecklistModal(true);
+    //Ovo postavi na ovo ako bude trebala da se vrsi konfirmacija prije go back
+    //Lindon rekao da ne
+    this.router.navigate([""]);
+    // this.shared.setOpenChecklistModal(true);
   }
 
   goToSetupRouteFromOpenChecklist() {
