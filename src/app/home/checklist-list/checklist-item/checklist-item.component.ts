@@ -203,11 +203,13 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             updatedSubtask).subscribe({
             next: res => {
                 console.log("uspjesno markovao kao na, res je "+ res);
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             },
             error: err => {
                 console.log("greska za markovanje kao na, err je " + err);
                 //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             }
         })
@@ -268,11 +270,13 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             + subtaskResultId, updatedSubtask).subscribe({
             next: res => {
                 console.log("uspjesno markovao kao na(ima result), res je "+ res);
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             },
             error: err => {
                 console.log("greska za markovanje kao na(ima result), err je " + err);
                 //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             }
         })
@@ -564,12 +568,14 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             next: res => {
                 console.log("uspjesno dodao note(no results prior) "+ res);
                 this.isNewNoteModalOpen = false;
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             },
             error: err => {
                 console.log("greska dodavanja note-a (no results prior), err je " + err);
                 //ovdje eventualno umjesto ovoga pokazuj error modal
                 this.isNewNoteModalOpen = false;
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             }
         })
@@ -634,12 +640,14 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
             next: res => {
                 console.log("uspjesno dodao note(has results prior) "+ res);
                 this.isExistingNoteModalOpen = false;
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             },
             error: err => {
                 console.log("greska dodavanja note-a (has results prior), err je " + err);
                 //ovdje eventualno umjesto ovoga pokazuj error modal
                 this.isExistingNoteModalOpen = false;
+                this.addingSubtask = false;
                 this.ucitavanjeCheckliste();
             }
         })

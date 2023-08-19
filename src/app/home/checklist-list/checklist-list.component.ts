@@ -99,6 +99,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   }
   cancelDeleteChecklist(){
     this.isDeleteModalOpen = false;
+    this.addingChecklist = false;
     this.ucitavanjeChecklisti();
   }
   error() {

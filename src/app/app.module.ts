@@ -20,6 +20,7 @@ import { CheckModalComponent } from './shared/check-modal/check-modal.component'
 import { NoteModalComponent } from './shared/note-modal/note-modal.component';
 import { SubtaskSetupComponent } from './home/checklist-list/subtask-setup/subtask-setup.component';
 import { ErrorComponent } from './error/error.component';
+import {ConfirmLeaveGuard} from "./can-deactivate.guard";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { ErrorComponent } from './error/error.component';
     FormsModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ConfirmLeaveGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
