@@ -1,27 +1,38 @@
-# Checklists
+# Checklists projekat
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+### Finished/fixed features/requirements/bugs (with // prefix)
 
-## Development server
+//Setup button goes to a new route for setting up(editing) the checklist but saves the outlet in localstorage for later (na setup stranicu uzmi desc checkliste dodaj loader za ovo ofc)\
+//On setup save show loader in a modal over the background with some opacity, then go back and refresh the data
+//Also on setup if the user presses top left ask him if he really wants to go back\
+//Also on bucket in header, show him the modal on the space below and if it’s successful go back and refresh\
+//Add the local storage and keep the selected outlet in it\
+//Also ask the user upon cancelling if he is sure he wants to cancel\
+//work on header setup bin\
+//Checklist open opens checklist details: top right setup, top left just go back without asking (on this page I’ll use getlistofsubtasks)\
+//Modals for deleting tasks and checklists are reusable components\
+//While adding a checklist or a subtask you can also save upon entering.\
+//Pressing the subtask shows the subtask details, if completed or na show full data with who did it and when\
+//When we slide the task we can mark it as n/a\
+//Clicking the circle marks the task as completed(checkmark)\
+//Ask what the date is for in getsubtasklist, cause my tasks are reset on today’s date, but on 17th of august they are all completed or n/a’d as they should be - SOLVED: checklists are daily\
+//You can click add note either if a task has the note already or not (but if it already has a note you can also click on the icon note to edit it), all of this opens up a dialog with input)\
+//Ask if I can mark a completed task n/a, and n/a task as completed (switch it) and other variants - SOLVED: he said yes you can switch them\
+//Upon saving show loader until the save is completed and until the subtasks are loaded again. Also you can only delete the note through saving empty note.\
+//Last subtask on example has a star(if a subtask is marked as important), exclamation if it’s urgent, also if the subtask has a defined time info, show it(shows how long the subtask has time left to complete)\
+//Fix sliding anywhere\
+//Maybe if you go to open checklist, then setup checklist top right, going back should then bring you to open checklist and not setup checklist\
+//Vidi za manuelno pomjeranje naprijed nazad
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Non priorities (small questions/possible edits)
 
-## Code scaffolding
+-When he said “Clicking the circle marks the task as completed(checkmark)” did he mean clicking again would revert that (I don’t think so cause it wouldn’t make sense but still)\
+-Ask for last day check ( why didn’t it go away)\
+-Multiline for note\
+-Maybe mention that getbusinessdate gets outlet’s location business date but I complete a task on my date, so if I complete it late at night I complete it on a date before, even though the business outlet date is tomorrow in outlet location(maybe this is intended)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### NEXT TODO
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+-Pitaj za vrijeme(ono 15:00) da li je to due time absolute ili relative and does it mean there’s 15 hours left to finish it or it should be finished by 15 o’clock. Then make the pin next to other icons and changing it in setup.\
+-Maybe on setup routes going back instead of asking are you sure you want to cancel checks for changes and if there are none just goes back but if there are changes Says “Unsaved changes” Are you sure you want to cancel, and then either you have just
+a yes next to no which goes back, or no, yes, and yes(save changes). 
