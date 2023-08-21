@@ -1,5 +1,43 @@
 # Checklists projekat
 
+## Features
+- Home page lets you pick an outlet
+(which gets saved in localstorage and you will be in this outlet
+until you change it or empty the localstorage).
+- Picking an outlet gives you the list of its checklists
+- The circle on the left shows the number of subtasks of individual checklists and their progress in advance
+(completing the tasks inside fills the circle with orange color percentage wise)
+- Pulling the checklist to the left reveals options for deleting it or setting it up(editing it)
+- You can add a new task by pressing the blue + button at the bottom right corner.
+This brings up a form, invalid only if the title is empty.
+- Deciding to setup the checklist brings you to its edit page
+- (from the header you can go back at which point you are asked for confirmation, and you can press the bucket
+icon as well if you want to delete the checklist from there, which brings up the confirmation too)
+- The checklist name is required, and the description can't be longer than 250 characters
+- Deciding to save or cancel the edit brings up confirmation modals as well
+- Now from the home page, clicking on the checklist name opens the checklist
+showing its subtasks
+- You can add a new subtask by pressing the bottom right + button like on the home page
+- The header arrow is for going back (no confirmation needed), and the gear button at the top right
+location is for accessing the edit checklist page in this way too
+- Each subtask can be marked as complete by clicking on the circle to the left
+- Pulling the individual subtask to the left reveals 3 options:
+  1. Note: brings up a popup for adding a note if there is none, or editing an existing note
+     (you can only delete the note by saving an empty string).
+  2. Mark as N/A: marks the note as not applicable(this is disabled if it already is)
+  3. Setup: opens the subtask's edit page
+- Each subtask can have a star, exclamation mark or a time badge on the right.
+Star means the task is important, exclamation means that the task is urgent,
+and the time badge shows until when the task has to be completed.
+- On the subtask setup page, the header contains the arrow button for going back(asks for confirmation)
+and the bucket for deleting the task(asks for confirmation).
+- You can edit the subtask's name and description here too, but in this case
+You have an option for defining the deadline(the time badge from before) which brings up
+the hour and minute selection, after adding/changing the deadline you can delete it by pressing the x button on the right
+- You can mark the task to be completed at the last day of the month(like the checklist),
+And you can mark it as important and/or urgent too.
+- Pressing Save or cancel brings up appropriate confirmation modals for each.
+
 ### Finished/fixed features/requirements/bugs (with // prefix)
 
 //Setup button goes to a new route for setting up(editing) the checklist but saves the outlet in localstorage for later (na setup stranicu uzmi desc checkliste dodaj loader za ovo ofc)<br/>
