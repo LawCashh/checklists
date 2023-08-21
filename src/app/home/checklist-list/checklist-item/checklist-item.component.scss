@@ -161,6 +161,12 @@
         margin-bottom: 30px;
       }
     }
+    &__title, &__title--up{
+      max-width: 30%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     &__notediv{
       position: absolute;
       bottom: 20px;

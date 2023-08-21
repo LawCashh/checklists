@@ -119,6 +119,13 @@
       flex-direction: column;
       justify-content: center;
       color: #323232;
+      max-width: 60%;
+      span{
+        overflow: hidden;
+        max-width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
     &__action{
       position: absolute;
