@@ -37,6 +37,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   hasNote: boolean[] = [];
   isImportant: boolean[] = [];
   isUrgent: boolean[] = [];
+  hasTimeDefined: boolean[] = [];
   isNewNoteModalOpen = false;
   isExistingNoteModalOpen = false;
   currTitleForNote = "";
@@ -74,6 +75,8 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                             this.isImportant[i] = true; else this.isImportant[i] = false;
                         if(trenutniSubtask.urgent == true)
                             this.isUrgent[i] = true; else this.isUrgent[i] = false;
+                        if(trenutniSubtask.completeByTime !== null)
+                            this.hasTimeDefined[i] = true; else this.hasTimeDefined[i] = false;
                         if(trenutniSubtask.result !== null){
                             if(trenutniSubtask.result.completed==true){
                                 this.subtasksCompletedNaEmpty[i] = 1;

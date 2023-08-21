@@ -42,6 +42,9 @@
       <div class="subtask__statuses__exclamationdiv" *ngIf="isUrgent[i] == true">
         <img alt="" src="./assets/images/home/open-checklist/exclamation-circle-solid.svg">
       </div>
+      <div class="subtask__statuses__timebadge" *ngIf="hasTimeDefined[i] == true">
+        <span>{{subtask.completeByTime}}</span>
+      </div>
     </div>
     <div class="subtask__action">
       <button type="button" class="subtask__note" *ngIf="subtasksCompletedNaEmpty[i] == 0" (click)="otvoriNewModalNoResult(i, subtask.id)">

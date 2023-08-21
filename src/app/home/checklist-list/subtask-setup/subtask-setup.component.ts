@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../../data.service";
@@ -29,7 +29,9 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
   deleteModalSubscription = new Subscription();
   isDeleteModalOpen = false;
   errorType: 'taskEdit' | 'taskDelete' = 'taskEdit';
-
+  completeByTime: string | null = "";
+  showTimePicker: boolean = false;
+  @ViewChild('timeInput') timeInputRef!: ElementRef;
 
   constructor(private activatedRoute: ActivatedRoute, private http: DataService,
               private router: Router, private shared: SharedService) {
@@ -69,6 +71,7 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
             this.urgent = res.urgent;
             this.lastDay = res.lastDayOfMonth;
             this.isLoadingSetup = false;
+            this.completeByTime = res.completeByTime;
             if(res.description!== null)
               this.currDescLength = res.description?.length;
           },
@@ -97,7 +100,7 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
       "validDays": this.subtaskObject.validDays,
       "validDates": this.subtaskObject.validDates,
       "lastDayOfMonth": this.lastDay,
-      "completeByTime": this.subtaskObject.completeByTime,
+      "completeByTime": this.completeByTime,
       "rank": this.subtaskObject.rank,
       "overridable": this.subtaskObject.overridable,
       "deleted": this.subtaskObject.deleted,
@@ -165,5 +168,34 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
       }
     });
   }
+  // formatTime() {
+  //     if(this.completeByTime !== null){
+  //       const parts = this.completeByTime.split(":");
+  //       const hours = parts[0].padStart(2, '0');
+  //       const minutes = parts[1].padStart(2, '0');
+  //       if(parseInt(hours) < 8 || (parseInt(hours) == 18 && parseInt(minutes) > 0)|| parseInt(hours) > 18){
+  //         this.timeError = true;
+  //       }
+  //       else this.timeError = false;
+  //       this.completeByTime = `${hours}:${minutes}`;
+  //       this.showTimePicker = false;
+  //     }
+  // }
 
+  openTimeChange() {
+    // this.timeInputRef.nativeElement.style.visibility = "visible";
+    let el = this.timeInputRef.nativeElement as HTMLInputElement;
+    el.showPicker();
+  }
+
+  hasTimeError(completeByTime: null | string) {
+      if(completeByTime == null) return false
+      const parts = this.completeByTime!.split(":");
+      const hours = parts[0].padStart(2, '0');
+      const minutes = parts[1].padStart(2, '0');
+      if(parseInt(hours) < 8 || (parseInt(hours) == 18 && parseInt(minutes) > 0)|| parseInt(hours) > 18){
+        return true;
+      }
+      return false;
+  }
 }

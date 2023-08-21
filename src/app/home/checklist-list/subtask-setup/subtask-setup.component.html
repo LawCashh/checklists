@@ -23,8 +23,21 @@
                       (input)="updateDescLength()" placeholder="Start typing the description here.."></textarea>
         </div>
         <span class="setup__form__description__span">{{currDescLength}}/{{maxDescLength}}</span>
-
-        <div class="setup__form__radiodiv margintop50">
+        <div class="setup__form__time margintop50">
+            <img alt="" src="./assets/images/home/setup-subtask/iconmonstr-clock-thin.svg" (click)="openTimeChange()"/>
+            <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime==null"><-- Unesi deadline</span>
+            <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime!=null">{{completeByTime}}</span>
+            <input type="time" name="completeByTime"
+                   [(ngModel)]="completeByTime" #timeInput/>
+            <div *ngIf="hasTimeError(completeByTime)" class="setup__form__time__error">
+                <span>Vrijeme deadline-a mora biti izmedju 8:00-18:00h</span>
+            </div>
+            <button class="setup__form__time__x" *ngIf="completeByTime!==null"
+            (click)="completeByTime=null">
+                <span>x</span>
+            </button>
+        </div>
+        <div class="setup__form__radiodiv">
             <input class="setup__form__radiodiv__checkbox" type="checkbox" id="checkmark-lastday" name="checkmark-lastday"
                    [(ngModel)]="lastDay">
             <label for="checkmark-lastday">Checklist to be completed at the last day of the month</label>
@@ -42,7 +55,7 @@
         <div class="setup__form__buttonsdiv">
             <div class="setup__form__buttonsdiv__buttons">
                 <button type="button" (click)="isCheckModalOpen=true">Cancel</button>
-                <button type="button" (click)="setupSubtask(setupSubtaskForm)" [disabled]="!setupSubtaskForm.valid">Save</button>
+                <button type="button" (click)="setupSubtask(setupSubtaskForm)" [disabled]="!setupSubtaskForm.valid || hasTimeError(completeByTime)">Save</button>
             </div>
         </div>
         <app-check-modal *ngIf="isCheckModalOpen" (cancel)="isCheckModalOpen=false" (confirm)="cancelEverything(setupSubtaskForm)"></app-check-modal>

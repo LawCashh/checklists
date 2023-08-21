@@ -54,13 +54,52 @@
         padding-bottom: 5px;
       }
     }
-    &__name{
+    &__name, &__time{
       &__error{
         padding-left: 10px;
         font-size: 0.8rem;
         margin-right: 20px;
         span{
           color: red;
+        }
+      }
+    }
+    &__time{
+      margin: 10px;
+      width: calc(100% - 20px);
+      height: 30px;
+      display: flex;
+      flex-direction: row !important;
+      align-items: center;
+      position: relative;
+      //input[type="time"]{
+      //  margin-left: 10px;
+      //}
+      &__error{
+        margin-right: 50px;
+      }
+      &__title{
+        user-select: none;
+        margin-left: 10px;
+      }
+      input[type="time"]{
+        visibility: hidden;
+      }
+      &__x{
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        right: 0px;
+        background-color: gray;
+        border: none;
+        border-radius: 100px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        span{
+          margin: 0;
         }
       }
     }
@@ -163,6 +202,9 @@
   margin-top: 50px;
 }
 
+
+
+
 //pcs
 @media (min-width: 1024px) {
   .setup__form__buttonsdiv__buttons{
@@ -178,5 +220,8 @@
     button{
       width: 20vw;
     }
+  }
+  input[type="text"], textarea, label{
+    font-size: 1.1em;
   }
 }

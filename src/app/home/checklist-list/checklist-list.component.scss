@@ -154,3 +154,10 @@
     }
   }
 }
+
+//tablets
+@media (min-width: 769px) and (max-width: 1024px) {
+  input[type="text"]{
+    font-size: 1.1em;
+  }
+}
