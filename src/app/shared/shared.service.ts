@@ -8,7 +8,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 export class SharedService {
   userId = "1490106392118050028";
   corporateId = "500000000";
-  token = "82dbdf03-a920-42d3-ba4c-9f68bc62522c";
+  token = "68273de9-c5a7-49a7-bcda-7f7a2a2a0440";
   outletId = "500000101";
   checklistRefreshSubject = new Subject();
   setupCheckModal = false;
