@@ -213,6 +213,10 @@
     }
   }
 }
+.visible{
+  visibility: visible !important;
+  margin-left: 5px;
+}
 
 //tablets
 @media (min-width: 769px) and (max-width: 1024px) {

@@ -25,9 +25,11 @@
         <span class="setup__form__description__span">{{currDescLength}}/{{maxDescLength}}</span>
         <div class="setup__form__time margintop50">
             <img alt="" src="./assets/images/home/setup-subtask/iconmonstr-clock-thin.svg" (click)="openTimeChange()"/>
-            <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime==null"><-- Unesi deadline</span>
+            <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime==null">
+                <span *ngIf="!isIphoneOrIos()"><--</span>Unesi deadline<span *ngIf="isIphoneOrIos()">--></span>
+            </span>
             <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime!=null">{{completeByTime}}</span>
-            <input type="time" name="completeByTime"
+            <input type="time" name="completeByTime" [ngClass]="isIphoneOrIos() ? 'visible' : ''"
                    [(ngModel)]="completeByTime" #timeInput/>
             <div *ngIf="hasTimeError(completeByTime)" class="setup__form__time__error">
                 <span>Vrijeme deadline-a mora biti izmedju 8:00-18:00h</span>

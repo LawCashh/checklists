@@ -198,4 +198,8 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
       }
       return false;
   }
+
+  isIphoneOrIos() {
+    return /iPhone|iPad/i.test(navigator.userAgent);
+  }
 }
