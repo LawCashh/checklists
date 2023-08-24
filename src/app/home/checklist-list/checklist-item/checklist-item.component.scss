@@ -98,12 +98,39 @@
      }
    }
   }
+  .descriptionOpen{
+    height: 100px;
+  }
   .subtask, .subtask--bigger{
     border-bottom: 1px solid #e7e7e7;
     position: relative;
     width: calc(100vw + 180px);
     display: flex;
     align-items: center;
+    &__description{
+      height: 33px;
+      width: 35%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: absolute;
+      font-size: 0.9rem;
+      bottom: 20px;
+      left: 50px;
+      padding: 2px 5px;
+      color: gray;
+    }
+    &__description--up{
+      height: 33px;
+      width: 35%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: absolute;
+      font-size: 0.9rem;
+      bottom: 45px;
+      left: 50px;
+      padding: 2px 5px;
+      color: gray;
+    }
     &__message{
       position: absolute;
       font-size: 0.7rem;
@@ -170,6 +197,14 @@
     &__notediv{
       position: absolute;
       bottom: 20px;
+      left: 50px;
+      filter: invert(0.5);
+      border-radius: 100px;
+      padding: 2px 5px;
+    }
+    &__notediv--down{
+      position: absolute;
+      bottom: 15px;
       left: 50px;
       filter: invert(0.5);
       border-radius: 100px;

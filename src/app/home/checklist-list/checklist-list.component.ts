@@ -28,7 +28,7 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
   checklistToDeleteId = "";
   isErrorModalOpen = false;
   errorType : "checklistAdd" | "checklistDelete" = "checklistAdd";
-  completedSubtasksForChecklist: number[] = [];
+  completedOrNaSubtasksForChecklist: number[] = [];
   numberOfSubtasksForChecklist: number[] = [];
   addingChecklistFormOpen = false;
   //isDragging = false; mozda za desktop verziju, mozda iskoristi isSwiping
@@ -49,20 +49,20 @@ export class ChecklistListComponent implements OnInit, OnDestroy{
         for (let i = 0; i < this.checklists.length; i++){
           let checklistCurr = this.checklists[i];
           if (checklistCurr.subTasks == null){
-            this.completedSubtasksForChecklist[i] = 0;
+            this.completedOrNaSubtasksForChecklist[i] = 0;
             this.numberOfSubtasksForChecklist[i] = 0;
           }
           else {
             const subTaskovi = checklistCurr.subTasks;
             this.numberOfSubtasksForChecklist[i] = subTaskovi.length;
-            let currCompleted = 0;
+            let currCompletedOrNa = 0;
             for (let j = 0; j < subTaskovi.length; j++){
               let currResult = subTaskovi[j].result;
               if(currResult !== null){
-                if(currResult.completed) currCompleted++;
+                if(currResult.completed || currResult.na) currCompletedOrNa++;
               }
             }
-            this.completedSubtasksForChecklist[i] = currCompleted;
+            this.completedOrNaSubtasksForChecklist[i] = currCompletedOrNa;
           }
         }
         this.isLoadingChecklists = false;

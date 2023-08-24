@@ -22,7 +22,7 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
   lastDay: boolean = false;
   important: boolean = false;
   urgent: boolean = false;
-  isSaveModalOpen = false;
+  // isSaveModalOpen = false;
   isErrorModalOpen: boolean = false;
   isCheckModalOpen: boolean = false;
   checkModalSubscription = new Subscription();
@@ -43,9 +43,9 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
       this.currDescLength = this.descText.length;
   }
 
-  setupSubtask(setupSubtaskForm: NgForm){
-    this.isSaveModalOpen = true;
-  }
+  // setupSubtask(setupSubtaskForm: NgForm){
+  //   this.isSaveModalOpen = true;
+  // }
   ngOnInit(): void {
     this.checkModalSubscription = this.shared.getSetupCheckModalObservable().subscribe(value => {
       this.isCheckModalOpen = value;
@@ -84,7 +84,7 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
   }
 
   confirmSetupSubtask(setupSubtaskForm: NgForm) {
-    this.isSaveModalOpen = false;
+    // this.isSaveModalOpen = false;
     const updateInfo = {
       "id": this.subtaskId,
       "taskId": this.subtaskObject.taskId,
@@ -145,9 +145,9 @@ export class SubtaskSetupComponent implements OnInit, OnDestroy{
           console.error('Navigation error', error);
         });
   }
-  cancelSetupSubtask() {
-    this.isSaveModalOpen = false;
-  }
+  // cancelSetupSubtask() {
+  //   this.isSaveModalOpen = false;
+  // }
   ngOnDestroy(): void {
     this.checkModalSubscription.unsubscribe();
     this.deleteModalSubscription.unsubscribe();

@@ -10,9 +10,9 @@
        (touchend)="onTouchEnd($event, parentDiv)"
         (mousemove)="onMouseMove($event, parentDiv)">
     <div class="checklists__checklist__circleborder"
-         [style.background]="returnGradient(completedSubtasksForChecklist[i]/numberOfSubtasksForChecklist[i]*100)">
+         [style.background]="returnGradient(completedOrNaSubtasksForChecklist[i]/numberOfSubtasksForChecklist[i]*100)">
       <div class="checklists__checklist__circle">
-        <span>{{completedSubtasksForChecklist[i]}}/{{numberOfSubtasksForChecklist[i]}}</span>
+        <span>{{completedOrNaSubtasksForChecklist[i]}}/{{numberOfSubtasksForChecklist[i]}}</span>
       </div>
     </div>
     <div class="checklists__checklist__title">

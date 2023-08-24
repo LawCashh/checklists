@@ -22,7 +22,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   name: string = "";
   alertList: string | null = "";
   lastDay: boolean = false;
-  isSaveModalOpen = false;
+  //isSaveModalOpen = false;
   isErrorModalOpen: boolean = false;
   isCheckModalOpen: boolean = false;
   checkModalSubscription = new Subscription();
@@ -41,9 +41,9 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
     this.currDescLength = this.descText.length;
   }
 
-  setupChecklist(setupChecklistForm: NgForm){
-    this.isSaveModalOpen = true;
-  }
+  // setupChecklist(setupChecklistForm: NgForm){
+  //   this.isSaveModalOpen = true;
+  // }
   ngOnInit(): void {
     this.checkModalSubscription = this.shared.getSetupCheckModalObservable().subscribe(value => {
       this.isCheckModalOpen = value;
@@ -80,7 +80,7 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
   }
 
   confirmSetupChecklist(setupChecklistForm: NgForm) {
-    this.isSaveModalOpen = false;
+    //this.isSaveModalOpen = false;
     const updateInfo = {
       "id": this.checklistId,
       "workflowId": this.checklistObject.workflowId,
@@ -156,9 +156,9 @@ export class ChecklistSetupComponent implements OnInit, OnDestroy{
           console.error('Navigation error', error);
         });
   }
-  cancelSetupChecklist() {
-      this.isSaveModalOpen = false;
-  }
+  // cancelSetupChecklist() {
+  //     this.isSaveModalOpen = false;
+  // }
   ngOnDestroy(): void {
     this.checkModalSubscription.unsubscribe();
     this.deleteModalSubscription.unsubscribe();

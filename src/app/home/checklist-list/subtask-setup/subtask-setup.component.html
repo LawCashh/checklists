@@ -58,13 +58,14 @@
         <div class="setup__form__buttonsdiv">
             <div class="setup__form__buttonsdiv__buttons">
                 <button type="button" (click)="isCheckModalOpen=true">Cancel</button>
-                <button type="button" (click)="setupSubtask(setupSubtaskForm)" [disabled]="!setupSubtaskForm.valid || hasTimeError(completeByTime)">Save</button>
+<!--                bilo je setupSubtask ali modal nije necessary-->
+                <button type="button" (click)="confirmSetupSubtask(setupSubtaskForm)" [disabled]="!setupSubtaskForm.valid || hasTimeError(completeByTime)">Save</button>
             </div>
         </div>
         <app-check-modal *ngIf="isCheckModalOpen" (cancel)="isCheckModalOpen=false" (confirm)="cancelEverything(setupSubtaskForm)"></app-check-modal>
-        <app-setup-modal *ngIf="isSaveModalOpen" (confirm)="confirmSetupSubtask(setupSubtaskForm)"
-                         (cancel)="cancelSetupSubtask()"
-                         [staSetupujem]="'task'"></app-setup-modal>
+<!--        <app-setup-modal *ngIf="isSaveModalOpen" (confirm)="confirmSetupSubtask(setupSubtaskForm)"-->
+<!--                         (cancel)="cancelSetupSubtask()"-->
+<!--                         [staSetupujem]="'task'"></app-setup-modal>-->
     </form>
 </div>
 <app-error-modal *ngIf="isErrorModalOpen" (close)="error()" [kojiError]="errorType"></app-error-modal>
