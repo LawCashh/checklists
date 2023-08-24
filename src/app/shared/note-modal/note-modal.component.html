@@ -5,13 +5,14 @@
             <span>{{title}} - Note</span>
         </div>
         <form *ngIf="noteIs=='new'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm(noteForm)" novalidate>
-            <input class="modal__content__form__input"
+            <textarea class="modal__content__form__input"
+                      rows="3"
                    name="noteName"
                    [(ngModel)]="noteNameTwoWay"
                    placeholder="Type a new note here..."
                    #noteInput
                    #name="ngModel"
-                   type="text" >
+                      type="text" ></textarea>
 <!--            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">-->
 <!--                <span>Unesite note.</span>-->
 <!--            </div>-->
@@ -21,14 +22,15 @@
             </div>
         </form>
         <form *ngIf="noteIs=='existing'" #noteForm="ngForm" class="modal__content__form" (ngSubmit)="onConfirm(noteForm)" novalidate>
-            <input class="modal__content__form__input"
+            <textarea class="modal__content__form__input"
                    name="noteName"
+                      rows="3"
                    [(ngModel)]="noteNameTwoWay"
                    placeholder="Type the note here..."
                    required
                    #noteInput
                    #name="ngModel"
-                   type="text" >
+                      type="text" ></textarea>
 <!--            <div *ngIf="name.invalid && name.dirty" class="modal__content__form__input__error">-->
 <!--                <span>Unesite note.</span>-->
 <!--            </div>-->

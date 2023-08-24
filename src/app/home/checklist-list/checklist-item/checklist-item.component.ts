@@ -31,7 +31,7 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
   isErrorModalOpen = false;
   errorType : "taskAdd" | "taskDelete" = "taskAdd";
   addingSubtaskFormOpen = false;
-  //niz za svaki subtask, 0 je empty, 1 je completed, 2 je n/a, 3 has only a note
+  //niz za svaki subtask, 0 je empty, 1 je completed, 2 je n/a, 3 has only a note, 4 empty sa result
   subtasksCompletedNaEmpty: number[] = [];
   showDetails: boolean[] = [];
   hasNote: boolean[] = [];
@@ -87,8 +87,9 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
                                 if(trenutniSubtask.result.note !==null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
                             }
                             else {
-                                this.subtasksCompletedNaEmpty[i] = 3;
-                                if(trenutniSubtask.result.note !==null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
+                                if(trenutniSubtask.result.note !== null) this.subtasksCompletedNaEmpty[i] = 3;
+                                else this.subtasksCompletedNaEmpty[i] = 4;
+                                if(trenutniSubtask.result.note !== null && trenutniSubtask.result.note !=="") this.hasNote[i] = true;
                             }
                         } else this.subtasksCompletedNaEmpty[i] = 0;
                     }
@@ -408,6 +409,72 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
 
         this.ucitavanjeCheckliste();
     }
+    markAsEmpty(subtaskResultId: string, subtaskId: string, value: number, index: number) {
+        let id = localStorage.getItem("selectedOutlet");
+        if (id == null) id = this.shared.outletId;
+        let currDate = new Date();
+        const hh = currDate.getHours();
+        const mn = currDate.getMinutes();
+        const ss = currDate.getSeconds();
+        let currDateString = currDate.toISOString().split('T')[0];
+        const yyyy = currDate.getFullYear();
+        let mm = currDate.getMonth() + 1; // mjeseci krecu od 0
+        let dd = currDate.getDate();
+        let mmString = mm.toString();
+        let ddString = dd.toString();
+        let hhString = hh.toString();
+        let mnString = mn.toString();
+        let ssString = ss.toString();
+        if (dd < 10) ddString = '0' + dd.toString();
+        if (mm < 10) mmString = '0' + mm.toString();
+        if (hh < 10) hhString = '0' + hh.toString();
+        if (mn < 10) mnString = '0' + mn.toString();
+        if (ss < 10) ssString = '0' + ss.toString();
+        const currTimeDate = hhString + ":" + mnString + " " + ddString + '/' + mmString + '/' + yyyy;
+        const currTimeDateFull = currDateString + "T" + hhString + ":" + mnString + ":" + ssString +
+            ".000+01:00";
+
+        let note = this.subtasks[index].result!.note;
+
+        const updatedSubtask = {
+            "id": subtaskResultId,
+            "subTaskId": subtaskId,
+            "companyId": id,
+            "person":{"id":"1490106392118050028",
+                "lastName":"Suite",
+                "firstName":"Synergy",
+                "userName":"synergy",
+                "knownAs":"Synergy Suite",
+                "companyId":"500000000",
+                "personTypeId":"1",
+                "email":"admin+hq@synergysuite.com"},
+            "note": note,
+            "history":"",
+            "taskDate": currDateString,
+            "completed":false,
+            "completedTime": currTimeDate,
+            "completedDateTime": currTimeDateFull,
+            "lateNotificationSent":null,
+            "overridden":null,
+            "approvalRecordId":null,
+            "na":false
+        }
+
+        this.http.putSubtaskAsCompleted("http://api-development.synergysuite.net/rest/checklists/subtasks/results/"
+            + subtaskResultId, updatedSubtask).subscribe({
+            next: res => {
+                console.log("uspjesno markovao kao not-complete(ima result btw), res je "+ res);
+                this.ucitavanjeCheckliste();
+            },
+            error: err => {
+                console.log("greska za markovanje kao not-complete(ima result btw), err je " + err);
+                //ovdje eventualno umjesto ovoga pokazuj error modal
+                this.ucitavanjeCheckliste();
+            }
+        });
+
+        this.ucitavanjeCheckliste();
+    }
 
   ucitavanjeChecklistePartOne (): Observable<Checklist> {
       this.isLoadingOpenChecklist = true;
@@ -678,5 +745,4 @@ export class ChecklistItemComponent implements OnInit, OnDestroy{
     setupSubtask(id: string) {
         this.router.navigate(["setup-subtask", id]);
     }
-
 }

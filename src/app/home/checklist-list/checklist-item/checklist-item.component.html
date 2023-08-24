@@ -18,9 +18,9 @@
        (touchend)="onTouchEnd($event, parentDiv)"
        (mousemove)="onMouseMove($event, parentDiv)" #parentDiv *ngFor="let subtask of subtasks; index as i">
     <div class="subtask__circle">
-      <div *ngIf="subtasksCompletedNaEmpty[i]==1" class="subtask__circle__div--completed">&#10003;</div>
+      <div *ngIf="subtasksCompletedNaEmpty[i]==1" class="subtask__circle__div--completed" (click)="markAsEmpty(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)">&#10003;</div>
         <div *ngIf="subtasksCompletedNaEmpty[i]==0" class="subtask__circle__div--empty" (click)="markAsCompletedNoResult(subtask.id)"></div>
-        <div *ngIf="subtasksCompletedNaEmpty[i]==3" class="subtask__circle__div--empty" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)"></div>
+        <div *ngIf="subtasksCompletedNaEmpty[i]==3 || subtasksCompletedNaEmpty[i]==4" class="subtask__circle__div--empty" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)"></div>
         <div *ngIf="subtasksCompletedNaEmpty[i]==2" class="subtask__circle__div--na" (click)="markAsCompletedHasResult(subtask.result!.id, subtask.id, subtasksCompletedNaEmpty[i], i)">&minus;</div>
     </div>
     <div (click)="showDetails[i] = !showDetails[i]" [ngClass]="hasNote[i] == true ? 'subtask__title--up' : 'subtask__title'">
@@ -59,7 +59,7 @@
         <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
         <span>N/A</span>
       </button>
-      <button type="button" class="subtask__na" *ngIf="subtasksCompletedNaEmpty[i]==3 || subtasksCompletedNaEmpty[i]==1 " (click)="markAsNAHasResult(subtask.result!.id, subtask.id, i)">
+      <button type="button" class="subtask__na" *ngIf="subtasksCompletedNaEmpty[i]==3 || subtasksCompletedNaEmpty[i]==4 || subtasksCompletedNaEmpty[i]==1 " (click)="markAsNAHasResult(subtask.result!.id, subtask.id, i)">
         <img alt="" src="./assets/images/home/open-checklist/minus-circle.svg">
         <span>N/A</span>
       </button>
