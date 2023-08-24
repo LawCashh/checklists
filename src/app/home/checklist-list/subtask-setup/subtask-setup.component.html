@@ -28,7 +28,8 @@
             <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime==null">
                 <span *ngIf="!isIphoneOrIos()"><--</span>Unesi deadline<span *ngIf="isIphoneOrIos()">--></span>
             </span>
-            <span class="setup__form__time__title" (click)="openTimeChange()" *ngIf="completeByTime!=null">{{completeByTime}}</span>
+            <span class="setup__form__time__title" (click)="openTimeChange()"
+                  *ngIf="completeByTime!=null && !isIphoneOrIos()">{{completeByTime}}</span>
             <input type="time" name="completeByTime" [ngClass]="isIphoneOrIos() ? 'visible' : ''"
                    [(ngModel)]="completeByTime" #timeInput/>
             <div *ngIf="hasTimeError(completeByTime)" class="setup__form__time__error">
